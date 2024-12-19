@@ -26,11 +26,13 @@ func cursorCmd(num time.Duration) tea.Cmd {
     })
 }
 
+
 //TUI MODEL
 type model struct {
     promptText string
     userText *strings.Builder
     cursorVisible bool
+    cursorPosition int
     width int
     height int
 }
@@ -85,18 +87,40 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 //View logic
 func (m model) View() string {
-    currentText := []rune(m.userText.String()) // Get the user text as runes for precise handling
+    userInput := m.userText.String()
+    prompt := m.promptText
 
-    var renderedText string
-    if m.cursorVisible {
-        // Dynamically insert the cursor at the end of the text
-        renderedText = string(append(currentText, '█'))
-    } else {
-        renderedText = string(currentText)
+    var renderedText strings.Builder
+    //
+    // Add the cursor at the position corresponding to userText length
+    if len(userInput) < len(prompt) {
+
+        // Inject cursor at the next untyped position
+        cursorPosition := len(userInput)
+        renderedText.Reset() // Rebuild the string with the cursor inserted
+
+        for i, r := range prompt {
+            if i == cursorPosition && m.cursorVisible {
+                renderedText.WriteString("|") // Add the cursor here
+            }
+            if i < len(userInput) {
+                if rune(userInput[i]) == r {
+                    // Correct character (white)
+                    renderedText.WriteString(fmt.Sprintf("\033[97m%c\033[0m", r)) // White
+                } else {
+                    // Incorrect character (red)
+                    renderedText.WriteString(fmt.Sprintf("\033[31m%c\033[0m", userInput[i])) // Red
+                }
+            } else {
+                // Unentered character (gray prompt text)
+                renderedText.WriteString(fmt.Sprintf("\033[90m%c\033[0m", r)) // Gray
+            }
+        }
+        if cursorPosition > len(prompt) {
+            renderedText.WriteString("|")
+        }
     }
-
-    // Render the prompt text and the user text
-    return wordwrap.String(m.promptText + "\n" + renderedText + "\n", m.width)
+    return wordwrap.String(renderedText.String() , m.width)
 }
 
 //Initilize utility flag
@@ -112,23 +136,18 @@ func main() {
     flag.Parse()
 
     if *version {
-        fmt.Printf("monkeycode version 0.1.0\n");
+        fmt.Printf("monkeycode version v0.1.0\n");
         os.Exit(0)
     }
     
-    fmt.Println(*language, *version);
-
-    data, _ := os.ReadFile("test.txt")
-    prompt := strings.Split(strings.TrimSpace(string(data)), "\n")
-
-    for _, a := range prompt {
-        println(a)
-    }
+    //data, _ := os.ReadFile("test.txt")
+    //prompt := strings.TrimSpace(string(data))
 
     m := model{
-        promptText:     prompt[1],
+        promptText:     "printf(\"Hello World\")",
         userText:       &strings.Builder{},
         cursorVisible:  true,
+        cursorPosition: 0,
     }
 
     program := tea.NewProgram(m, tea.WithAltScreen())
