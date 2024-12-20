@@ -1,19 +1,6 @@
-asdlklaasldkalska
-sd
-asd
-as
-da
-asf
-adsdggsdgs
-dgsd
-gsdgsdgsdgsdgd
-gs
-dg
-sdg
-sdg
-sd
-gs
-d   as
-da
-sd  kskdjlaksjdlakksjdlaksjdlaksjda
-dasdkasd
+#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}

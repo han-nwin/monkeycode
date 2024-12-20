@@ -35,6 +35,9 @@ type model struct {
     cursorPosition int
     width int
     height int
+    startTime time.Time
+    isComplete bool
+    finalWPM int
 }
 
 //Init model
@@ -44,13 +47,22 @@ func (m model) Init() tea.Cmd {
 
 //Update logic
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-    switch msg := msg.(type) {
-    case tea.KeyMsg:
-        //Exit con Ctrl+C
-        if msg.Type == tea.KeyCtrlC {
+    // Always handle Ctrl+C and Ctrl+Z
+    if keyMsg, ok := msg.(tea.KeyMsg); ok {
+        if keyMsg.Type == tea.KeyCtrlC || keyMsg.Type == tea.KeyCtrlZ {
             return m, tea.Quit
         }
-        
+    }
+
+    switch msg := msg.(type) {
+    case tea.KeyMsg:
+        // Check if typing is complete
+        if m.userText.Len() == len(m.promptText) {
+            m.isComplete = true
+            m.finalWPM = calculateWPM(m.userText.String(), m.startTime)
+            return m, tea.Quit
+        }
+
         //On every keystroke, add one character to userText
         if msg.Type == tea.KeyEnter { //type Enter
             m.userText.WriteRune('\n')
@@ -91,36 +103,47 @@ func (m model) View() string {
     prompt := m.promptText
 
     var renderedText strings.Builder
-    //
-    // Add the cursor at the position corresponding to userText length
-    if len(userInput) < len(prompt) {
+    // Inject cursor at the next untyped position
+    cursorPosition := len(userInput)
 
-        // Inject cursor at the next untyped position
-        cursorPosition := len(userInput)
-        renderedText.Reset() // Rebuild the string with the cursor inserted
+    // Update final WPM only if typing is not complete
+    m.finalWPM = calculateWPM(userInput, m.startTime)
 
-        for i, r := range prompt {
-            if i == cursorPosition && m.cursorVisible {
-                renderedText.WriteString("|") // Add the cursor here
-            }
-            if i < len(userInput) {
-                if rune(userInput[i]) == r {
-                    // Correct character (white)
-                    renderedText.WriteString(fmt.Sprintf("\033[97m%c\033[0m", r)) // White
-                } else {
-                    // Incorrect character (red)
-                    renderedText.WriteString(fmt.Sprintf("\033[31m%c\033[0m", userInput[i])) // Red
-                }
-            } else {
-                // Unentered character (gray prompt text)
-                renderedText.WriteString(fmt.Sprintf("\033[90m%c\033[0m", r)) // Gray
-            }
+    for i, r := range prompt {
+        if i == cursorPosition && m.cursorVisible {
+            renderedText.WriteString("|") // Add the cursor here
         }
-        if cursorPosition > len(prompt) {
-            renderedText.WriteString("|")
+        if i < len(userInput) {
+            if rune(userInput[i]) == r {
+                // Correct character (white)
+                renderedText.WriteString(fmt.Sprintf("\033[97m%c\033[0m", r)) // White
+            } else {
+                // Incorrect character (red)
+                renderedText.WriteString(fmt.Sprintf("\033[31m%c\033[0m", userInput[i])) // Red
+            }
+        } else {
+            // Unentered character (gray prompt text)
+            renderedText.WriteString(fmt.Sprintf("\033[90m%c\033[0m", r)) // Gray
         }
     }
+
+    // Add WPM to the output
+    renderedText.WriteString(fmt.Sprintf("\n\nWPM: %d", m.finalWPM))
+
     return wordwrap.String(renderedText.String() , m.width)
+}
+
+//function to count wpm
+func calculateWPM(userText string, startTime time.Time) int {
+    elapsed := time.Since(startTime).Minutes() //time elapsed
+    if elapsed == 0 {
+        return 0
+    }
+
+    words := strings.Fields(userText) //split by white space
+    length := len(words)
+
+    return int(float64(length) / elapsed)
 }
 
 //Initilize utility flag
@@ -139,22 +162,35 @@ func main() {
         fmt.Printf("monkeycode version v0.1.0\n");
         os.Exit(0)
     }
-    
-    //data, _ := os.ReadFile("test.txt")
-    //prompt := strings.TrimSpace(string(data))
+
+    data, _ := os.ReadFile("test.txt")
+    prompt := strings.TrimSpace(string(data))
 
     m := model{
-        promptText:     "printf(\"Hello World\")",
+        promptText:     prompt,
         userText:       &strings.Builder{},
         cursorVisible:  true,
         cursorPosition: 0,
+        startTime:      time.Now(),
+        width:          80,
+        height:         20,
+        isComplete:     false,
+        finalWPM:       0,
     }
 
     program := tea.NewProgram(m, tea.WithAltScreen())
     //run program
-    _, err := program.Run()
+    exited, err := program.Run()
     if err != nil {
         fmt.Printf("Error running program: %v\n", err)
         os.Exit(-1)
+    }
+
+    outsideModel := exited.(model)
+    // Print the final WPM after the program exits
+    if outsideModel.isComplete {
+        fmt.Printf("\nTyping Complete! Final WPM: %d\n", outsideModel.finalWPM)
+    } else {
+        fmt.Println("\nExited without completing.")
     }
 }
