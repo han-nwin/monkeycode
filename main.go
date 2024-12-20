@@ -1,20 +1,23 @@
 package main
 
 import (
-    "fmt"
-    "flag"
-    "os"
-    "strings"
-    "time"
+	"flag"
+	"fmt"
+	"os"
+	"strings"
+	"time"
+	//"unicode"
 
-    tea "github.com/charmbracelet/bubbletea"
-    "github.com/muesli/reflow/wordwrap"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 var (
     language *string
     list_languages *bool
     version *bool
+
+    correctRune int
 )
 
 //Cursor tick speed
@@ -66,21 +69,35 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
         //On every keystroke, add one character to userText
         if msg.Type == tea.KeyEnter { //type Enter
             m.userText.WriteRune('\n')
+            correctRune++
 
         } else if msg.Type == tea.KeyTab { //type Tab
             m.userText.WriteString("    ")
+            correctRune += 4;
 
         } else if msg.Type == tea.KeyBackspace { //type Backspace
             currentText := m.userText.String()
-            runes := []rune(currentText)
-            if len(runes) > 0 {
-                runes = runes[:len(runes)-1]
-            }
-            m.userText.Reset()
-            m.userText.WriteString(string(runes))
+            currentRunes := []rune(currentText)
+            if len(currentRunes) > 0 {
+                lastTypedIndex := len(currentRunes) - 1
 
+                // Check if the last rune was correct and decrement `correctRune` if necessary
+                if lastTypedIndex < len(m.promptText) && currentRunes[lastTypedIndex] == rune(m.promptText[lastTypedIndex]) {
+                    correctRune-- // Decrement if the last typed character was correct
+                }
+
+                // Remove the last rune from the user text
+                currentRunes = currentRunes[:lastTypedIndex]
+                m.userText.Reset()
+                m.userText.WriteString(string(currentRunes))
+            }
         } else if len(msg.Runes) > 0 { //other keys
+            currentIndex := m.userText.Len()
+            if currentIndex < len(m.promptText) && rune(m.promptText[currentIndex]) == msg.Runes[0]{
+                correctRune++ // Increment correctRune here
+            }
             m.userText.WriteRune(msg.Runes[0])
+
         }
         return m, nil
 
@@ -126,9 +143,12 @@ func (m model) View() string {
             renderedText.WriteString(fmt.Sprintf("\033[90m%c\033[0m", r)) // Gray
         }
     }
-
+    renderedText.WriteString("\n\n")
     // Add WPM to the output
-    renderedText.WriteString(fmt.Sprintf("\n\nWPM: %d", m.finalWPM))
+    renderedText.WriteString(fmt.Sprintf("\033[97m%s\033[0m", fmt.Sprintf("WPM: %d", m.finalWPM)))
+
+    renderedText.WriteString(fmt.Sprintf("\033[90m%s\033[0m","\n* Press any key to exit after finishing"))
+    renderedText.WriteString(fmt.Sprintf("\033[90m%s\033[0m","\n* Ctrl-C or Ctrl-Z: exit any time\n"))
 
     return wordwrap.String(renderedText.String() , m.width)
 }
@@ -144,6 +164,13 @@ func calculateWPM(userText string, startTime time.Time) int {
     length := len(words)
 
     return int(float64(length) / elapsed)
+}
+
+//function to calculate accuracy
+func calculateAccuracy(userText string, correctRune int) float64 {
+    totalRunes := []rune(userText)
+
+    return (float64(correctRune) / float64(len(totalRunes)))*100
 }
 
 //Initilize utility flag
@@ -165,9 +192,10 @@ func main() {
 
     data, _ := os.ReadFile("test.txt")
     prompt := strings.TrimSpace(string(data))
+    promptReplaceTab := strings.ReplaceAll(prompt, "\t", "    ")//replace tab into 4 spaces
 
     m := model{
-        promptText:     prompt,
+        promptText:     promptReplaceTab,
         userText:       &strings.Builder{},
         cursorVisible:  true,
         cursorPosition: 0,
@@ -190,6 +218,7 @@ func main() {
     // Print the final WPM after the program exits
     if outsideModel.isComplete {
         fmt.Printf("\nTyping Complete! Final WPM: %d\n", outsideModel.finalWPM)
+        fmt.Printf("Accuracy: %.2f%% \n", calculateAccuracy(outsideModel.userText.String(), correctRune))
     } else {
         fmt.Println("\nExited without completing.")
     }
