@@ -1,0 +1,25 @@
+package main
+
+import (
+    "fmt"
+)
+
+func sum(arr []int, ch chan int) {
+    total := 0
+    for _, v := range arr {
+        total += v
+    }
+    ch <- total
+}
+
+func main() {
+    arr := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+    ch := make(chan int)
+
+    go sum(arr[:len(arr)/2], ch) // Sum the first half
+    go sum(arr[len(arr)/2:], ch) // Sum the second half
+
+    total := <-ch + <-ch // Combine the results
+    fmt.Println("Total Sum:", total)
+}
+

@@ -1,0 +1,22 @@
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+func printName(name string, wg *sync.WaitGroup) {
+    defer wg.Done()
+    fmt.Println("Hello,", name)
+}
+
+func main() {
+    var wg sync.WaitGroup
+    names := []string{"Alice", "Bob", "Charlie"}
+    for _, name := range names {
+        wg.Add(1)
+        go printName(name, &wg)
+    }
+    wg.Wait() // Wait for all goroutines to complete
+}
+

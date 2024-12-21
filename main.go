@@ -1,12 +1,13 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"time"
-	//"unicode"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/muesli/reflow/wordwrap"
@@ -19,6 +20,10 @@ var (
 
     correctRune int
 )
+
+// Embed all files in the languages directory
+//go:embed languages/*
+var embeddedFiles embed.FS
 
 //Cursor tick speed
 type cursorTick struct{}
@@ -170,14 +175,14 @@ func calculateWPM(userText string, startTime time.Time) int {
 func calculateAccuracy(userText string, correctRune int) float64 {
     totalRunes := []rune(userText)
 
-    return (float64(correctRune) / float64(len(totalRunes)))*100
+    return min(100.00,(float64(correctRune) / float64(len(totalRunes)))*100)
 }
 
 //Initilize utility flag
 func init() {
     version = flag.Bool("version", false, "Check program version")
-    language = flag.String("lang", "cpp", "Specify a language")
-    list_languages = flag.Bool("listlang", false, "List all available languages")
+    language = flag.String("l", "go", "Specify a language")
+    list_languages = flag.Bool("list", false, "List all available languages")
 }
 
 
@@ -190,7 +195,33 @@ func main() {
         os.Exit(0)
     }
 
-    data, _ := os.ReadFile("test.txt")
+    if *list_languages {
+        fmt.Printf("Support languages:\n c\n c++\n go(default)\n python\n")
+        os.Exit(0)
+    }
+
+    lang := *language
+    path := fmt.Sprintf("languages/%s", lang)
+
+    // Read embedded directory
+    entries, err := embeddedFiles.ReadDir(path)
+    if err != nil {
+        fmt.Printf("Cannot access 'languages/%s' directory: %v\n", lang, err)
+        os.Exit(-1)
+    }
+
+    // Randomly select a file from the embedded directory
+    randIdx := rand.Intn(len(entries))
+    selectedFile := entries[randIdx]
+
+    // Read the content of the randomly selected file
+    filePath := fmt.Sprintf("%s/%s", path, selectedFile.Name())
+    data, err := embeddedFiles.ReadFile(filePath)
+    if err != nil {
+        fmt.Printf("Error loading content file: %v\n", err)
+        os.Exit(-1)
+    }
+
     prompt := strings.TrimSpace(string(data))
     promptReplaceTab := strings.ReplaceAll(prompt, "\t", "    ")//replace tab into 4 spaces
 
@@ -217,7 +248,7 @@ func main() {
     outsideModel := exited.(model)
     // Print the final WPM after the program exits
     if outsideModel.isComplete {
-        fmt.Printf("\nTyping Complete! Final WPM: %d\n", outsideModel.finalWPM)
+        fmt.Printf("\nTyping Complete! WPM: %d\n", outsideModel.finalWPM)
         fmt.Printf("Accuracy: %.2f%% \n", calculateAccuracy(outsideModel.userText.String(), correctRune))
     } else {
         fmt.Println("\nExited without completing.")

@@ -1,0 +1,17 @@
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+    fmt.Println(msg)
+}
+
+func main() {
+    go printMessage("Hello from Goroutine!")
+    time.Sleep(1 * time.Second) // Wait for the goroutine to complete
+    fmt.Println("Main function finished")
+}
+

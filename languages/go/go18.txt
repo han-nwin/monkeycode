@@ -1,0 +1,20 @@
+package main
+
+import "fmt"
+
+type Address struct {
+    City  string
+    State string
+}
+
+type Person struct {
+    Name    string
+    Age     int
+    Address Address
+}
+
+func main() {
+    p := Person{Name: "Alice", Age: 25, Address: Address{City: "Dallas", State: "TX"}}
+    fmt.Printf("Name: %s, City: %s, State: %s\n", p.Name, p.Address.City, p.Address.State)
+}
+

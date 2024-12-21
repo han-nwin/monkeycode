@@ -1,0 +1,12 @@
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Before goto")
+    goto Skip
+    fmt.Println("This will be skipped")
+Skip:
+    fmt.Println("After goto")
+}
+

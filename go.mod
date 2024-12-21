@@ -2,7 +2,10 @@ module github.com/han-nwin/monkeycode
 
 go 1.23.3
 
-require github.com/charmbracelet/bubbletea v1.2.4
+require (
+	github.com/charmbracelet/bubbletea v1.2.4
+	github.com/muesli/reflow v0.3.0
+)
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
@@ -16,7 +19,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
-	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	golang.org/x/sync v0.9.0 // indirect

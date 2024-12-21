@@ -1,0 +1,34 @@
+package main
+
+import "fmt"
+
+type Shape interface {
+    Area() float64
+}
+
+type Circle struct {
+    Radius float64
+}
+
+func (c Circle) Area() float64 {
+    return 3.14 * c.Radius * c.Radius
+}
+
+type Rectangle struct {
+    Width, Height float64
+}
+
+func (r Rectangle) Area() float64 {
+    return r.Width * r.Height
+}
+
+func main() {
+    shapes := []Shape{
+        Circle{Radius: 5.0},
+        Rectangle{Width: 4.0, Height: 6.0},
+    }
+    for _, shape := range shapes {
+        fmt.Printf("Area: %.2f\n", shape.Area())
+    }
+}
+

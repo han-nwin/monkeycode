@@ -1,0 +1,17 @@
+package main
+
+import "fmt"
+
+func main() {
+    i := 0
+Loop:
+    if i == 3 {
+        goto End
+    }
+    fmt.Println(i)
+    i++
+    goto Loop
+End:
+    fmt.Println("Loop Ended")
+}
+

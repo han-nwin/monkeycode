@@ -1,0 +1,20 @@
+package main
+
+import (
+    "fmt"
+    "net"
+)
+
+func main() {
+    listener, err := net.Listen("tcp", ":8080")
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer listener.Close()
+    fmt.Println("Server listening on port 8080")
+    conn, _ := listener.Accept()
+    conn.Write([]byte("Hello from server!"))
+    conn.Close()
+}
+

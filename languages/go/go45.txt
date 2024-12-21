@@ -1,0 +1,32 @@
+package main
+
+import (
+    "fmt"
+    "io"
+    "os"
+)
+
+func main() {
+    sourceFile, err := os.Open("output.txt")
+    if err != nil {
+        fmt.Println("Error opening source file:", err)
+        return
+    }
+    defer sourceFile.Close()
+
+    destinationFile, err := os.Create("copy.txt")
+    if err != nil {
+        fmt.Println("Error creating destination file:", err)
+        return
+    }
+    defer destinationFile.Close()
+
+    _, err = io.Copy(destinationFile, sourceFile)
+    if err != nil {
+        fmt.Println("Error copying file content:", err)
+        return
+    }
+
+    fmt.Println("File copied successfully")
+}
+

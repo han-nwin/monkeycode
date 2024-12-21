@@ -1,0 +1,21 @@
+package main
+
+import "fmt"
+
+func printType(v interface{}) {
+    switch v.(type) {
+    case int:
+        fmt.Println("Type: int")
+    case string:
+        fmt.Println("Type: string")
+    default:
+        fmt.Println("Unknown Type")
+    }
+}
+
+func main() {
+    printType(42)
+    printType("Go Programming")
+    printType(3.14)
+}
+

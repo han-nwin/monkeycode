@@ -1,0 +1,19 @@
+package main
+
+import "fmt"
+
+type Product struct {
+    Name  string
+    Price float64
+}
+
+func main() {
+    products := []Product{
+        {Name: "Laptop", Price: 1000.0},
+        {Name: "Phone", Price: 500.0},
+    }
+    for _, product := range products {
+        fmt.Printf("Product: %s, Price: %.2f\n", product.Name, product.Price)
+    }
+}
+

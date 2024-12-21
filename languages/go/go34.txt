@@ -1,0 +1,19 @@
+package main
+
+import "fmt"
+
+func main() {
+    var x int
+    fmt.Print("Enter a number: ")
+    fmt.Scan(&x)
+
+    if x < 0 {
+        goto Error
+    }
+    fmt.Println("You entered:", x)
+    return
+
+Error:
+    fmt.Println("Error: Negative number not allowed")
+}
+
