@@ -10,11 +10,73 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/muesli/reflow/wordwrap"
+    "github.com/charmbracelet/lipgloss"
 )
 
 var (
     CorrectRune int
 )
+
+// Styling variables
+var (
+	// Title style 
+	titleStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("#F5C2E7")). // Pinkish-purple (Rosewater)
+		Background(lipgloss.Color("#1E1E2E")). // Dark background (Base)
+		Padding(1, 1)
+
+	// Option style 
+	optionStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#8AADF4")). // Soft blue (Blue)
+		PaddingLeft(2)
+
+	// Stats style 
+	statsStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#A6E3A1")). // Lime green (Green)
+		Bold(true).
+		PaddingLeft(1)
+
+	// Instruction style 
+	instructionStyle = lipgloss.NewStyle().
+		Italic(true).
+		Foreground(lipgloss.Color("#9399B2")). // Muted gray (Subtext1)
+		PaddingLeft(1)
+
+	// Correct character style 
+	correctCharStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#C9CBFF")). // Soft white (Text)
+		Bold(true)
+
+	// Incorrect character style 
+	incorrectCharStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#F38BA8")). // Red (Red)
+		Bold(true)
+
+	// Untyped character style 
+	untypedCharStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#585B70")) // Dimmed gray (Surface1)
+
+	// Cursor style (lavender)
+	cursorStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#CBA6F7")) // (Lavender)
+
+	// WPM style
+	wpmStyle = lipgloss.NewStyle().
+		Foreground(lipgloss.Color("#A6E3A1")). // Lime green (Green)
+		Bold(true)
+)
+
+
+func renderBackground(width, height int, color string) string {
+	backgroundStyle := lipgloss.NewStyle().
+		Background(lipgloss.Color(color)).
+		Width(width).
+		Height(height)
+
+	// Create a box with spaces filling the screen
+	return backgroundStyle.Render(strings.Repeat(" ", width*height))
+}
 
 // Embed all files in the languages directory
 //go:embed languages/*
@@ -78,6 +140,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.SelectedLang = "python"
 			case "3":
 				m.SelectedLang = "c++"
+            case "q":
+                return m, tea.Quit
 			default:
 				return m, nil
 			}
@@ -165,14 +229,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	switch m.State {
 	case PreProgram:
-		return `
-Select a language:
-[1] Go
-[2] Python
-[3] C++
+        title := titleStyle.Render("Select a Language")
+		options := lipgloss.JoinVertical(lipgloss.Left,
+			optionStyle.Render("\n[1] Go"),
+			optionStyle.Render("[2] Python"),
+			optionStyle.Render("[3] C++"),
+		)
+        instructions := lipgloss.JoinVertical(lipgloss.Left,
+            instructionStyle.Render("\nUse number keys to pick a language."),
+            instructionStyle.Render("q: exit"),
+        )
 
-Use number keys to pick a language.
-`
+		return lipgloss.JoinVertical(lipgloss.Left, title, options, instructions)
+
     case TypingTUI:
         userInput := m.UserText.String()
         prompt := m.PromptText
@@ -188,39 +257,51 @@ Use number keys to pick a language.
 
         for i, r := range prompt {
             if i == cursorPosition && m.CursorVisible {
-                renderedText.WriteString("|") // Add the cursor here
+                renderedText.WriteString(cursorStyle.Render("|")) // Add the styled cursor
             }
             if i < len(userInput) {
                 if rune(userInput[i]) == r {
-                    // Correct character (white)
-                    renderedText.WriteString(fmt.Sprintf("\033[97m%c\033[0m", r)) // White
+                    // Correct character
+                    renderedText.WriteString(correctCharStyle.Render(string(r)))
                 } else {
-                    // Incorrect character (red)
-                    renderedText.WriteString(fmt.Sprintf("\033[31m%c\033[0m", userInput[i])) // Red
+                    // Incorrect character
+                    renderedText.WriteString(incorrectCharStyle.Render(string(userInput[i])))
                 }
             } else {
-                // Unentered character (gray prompt text)
-                renderedText.WriteString(fmt.Sprintf("\033[90m%c\033[0m", r)) // Gray
+                // Untyped character
+                renderedText.WriteString(untypedCharStyle.Render(string(r)))
             }
         }
         renderedText.WriteString("\n\n")
         // Add WPM to the output
-        renderedText.WriteString(fmt.Sprintf("\033[97m%s\033[0m", fmt.Sprintf("WPM: %d", m.FinalWPM)))
+        renderedText.WriteString(wpmStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)))
 
         //renderedText.WriteString(fmt.Sprintf("\033[90m%s\033[0m","\n* Press any key to exit after finishing"))
-        renderedText.WriteString(fmt.Sprintf("\033[90m%s\033[0m","\n* Ctrl-R: restart\n"))
+        renderedText.WriteString(instructionStyle.Render("\n* Ctrl-R: restart"))
 
         return wordwrap.String(renderedText.String() , m.Width)
-    case Results:
-        // Display final results
-		return fmt.Sprintf(`
-Typing Complete!
-WPM: %d
-Accuracy: %.2f%%
 
-Press q to exit.
-Press r to restart.
-`, m.FinalWPM, m.Accuracy)
+    case Results:
+        // Render the styled elements using global styles
+        title := titleStyle.Render("Typing Complete!")
+        stats := lipgloss.JoinVertical(
+            lipgloss.Left,
+            statsStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)),
+            statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%", m.Accuracy)),
+        )
+        instructions := lipgloss.JoinVertical(
+            lipgloss.Left,
+            instructionStyle.Render("Press q to exit."),
+            instructionStyle.Render("Press r to restart."),
+        )
+
+        // Combine all the parts into a single view
+        return lipgloss.JoinVertical(
+            lipgloss.Center,
+            title,
+            stats,
+            instructions,
+        )
     }
     return ""
 }
