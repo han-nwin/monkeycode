@@ -28,7 +28,7 @@ func main() {
 	// Create the Wish SSH server
 	server, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath(".ssh/id_ed25519"), // Path to your SSH host key
+		wish.WithHostKeyPath("~/.ssh/id_ed25519"), // Path to your SSH host key
 		wish.WithMiddleware(
             bubbletea.Middleware(teaHandler),
 			logging.Middleware(),
