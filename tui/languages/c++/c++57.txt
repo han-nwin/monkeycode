@@ -1,0 +1,8 @@
+#include <iostream>
+#include <utility>
+int main() {
+    std::pair<int, std::string> p(1, "Apple");
+    std::cout << "ID: " << p.first << ", Name: " << p.second;
+    return 0;
+}
+

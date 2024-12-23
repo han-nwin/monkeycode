@@ -1,0 +1,16 @@
+#include <iostream>
+class Demo {
+public:
+    int* data;
+    Demo() {
+        data = new int[10];
+    }
+    ~Demo() {
+        delete[] data;
+    }
+};
+int main() {
+    Demo d;
+    return 0;
+}
+

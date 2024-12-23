@@ -1,0 +1,10 @@
+#include <iostream>
+#include <ctime>
+int main() {
+    std::time_t now = std::time(nullptr);
+    std::tm* localTime = std::localtime(&now);
+    std::cout << "Current Time: " << localTime->tm_hour << ':' 
+              << localTime->tm_min << ':' << localTime->tm_sec;
+    return 0;
+}
+

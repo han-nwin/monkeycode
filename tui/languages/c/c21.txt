@@ -1,0 +1,8 @@
+#include <stdio.h>
+int main() {
+    int nums[] = {10, 20, 30};
+    int *ptr = nums;
+    for (int i = 0; i < 3; i++)
+        printf("Value: %d\n", *(ptr + i));
+    return 0;
+}

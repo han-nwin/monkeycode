@@ -1,0 +1,9 @@
+#include <stdio.h>
+int main() {
+    int num = 0;
+    do {
+        printf("Number: %d\n", num);
+        num++;
+    } while (num < 3);
+    return 0;
+}

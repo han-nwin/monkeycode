@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    double* ptr = new double;
+    *ptr = 3.14;
+    std::cout << *ptr;
+    delete ptr;
+    return 0;
+}
+

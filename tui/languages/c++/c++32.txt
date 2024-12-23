@@ -1,0 +1,10 @@
+#include <iostream>
+#include <map>
+int main() {
+    std::map<int, std::string> m = {{1, "One"}, {2, "Two"}};
+    for (auto& pair : m) {
+        std::cout << pair.first << ": " << pair.second;
+    }
+    return 0;
+}
+

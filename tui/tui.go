@@ -13,9 +13,6 @@ import (
     "github.com/charmbracelet/lipgloss"
 )
 
-var (
-    CorrectRune int
-)
 
 // Styling variables
 var (
@@ -33,15 +30,19 @@ var (
 
 	// Stats style 
 	statsStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#A6E3A1")). // Lime green (Green)
+		Foreground(lipgloss.Color("#F9E2AF")). // Yellow
 		Bold(true).
 		PaddingLeft(1)
 
 	// Instruction style 
 	instructionStyle = lipgloss.NewStyle().
 		Italic(true).
-		Foreground(lipgloss.Color("#9399B2")). // Muted gray (Subtext1)
-		PaddingLeft(1)
+		Foreground(lipgloss.Color("#9399B2")) // Muted gray (Subtext1)
+    
+    // Lable syle
+    labelStyle = lipgloss.NewStyle().
+        Foreground(lipgloss.Color("#1E1E2E")).
+        Background(lipgloss.Color("#9399B2"))
 
 	// Correct character style 
 	correctCharStyle = lipgloss.NewStyle().
@@ -55,7 +56,7 @@ var (
 
 	// Untyped character style 
 	untypedCharStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#585B70")) // Dimmed gray (Surface1)
+		Foreground(lipgloss.Color("#585B70"))// Dimmed gray (Surface1)
 
 	// Cursor style (lavender)
 	cursorStyle = lipgloss.NewStyle().
@@ -79,7 +80,7 @@ func renderBackground(width, height int, color string) string {
 }
 
 // Embed all files in the languages directory
-//go:embed languages/*
+//go:embed languages/**/*
 var embeddedFiles embed.FS
 
 //Cursor tick speed
@@ -117,7 +118,7 @@ type Model struct {
 
 //Init model
 func (m Model) Init() tea.Cmd {
-    return cursorCmd(450)
+    return cursorCmd(600)
 }
 
 //Update logic
@@ -137,9 +138,15 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "1":
 				m.SelectedLang = "go"
 			case "2":
-				m.SelectedLang = "python"
+				m.SelectedLang = "c"
 			case "3":
 				m.SelectedLang = "c++"
+            case "4":
+                m.SelectedLang = "python"
+            case "5":
+                m.SelectedLang = "java"
+            case "6":
+                m.SelectedLang = "javascript"
             case "q":
                 return m, tea.Quit
 			default:
@@ -172,11 +179,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
             //On every keystroke, add one character to userText
             if msg.Type == tea.KeyEnter { //type Enter
                 m.UserText.WriteRune('\n')
-                CorrectRune++
 
             } else if msg.Type == tea.KeyTab { //type Tab
                 m.UserText.WriteString("    ")
-                CorrectRune += 4;
 
             } else if msg.Type == tea.KeyBackspace { //type Backspace
                 currentText := m.UserText.String()
@@ -184,9 +189,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
                 if len(currentRunes) > 0 {
                     lastTypedIndex := len(currentRunes) - 1
 
-                    // Check if the last rune was correct and decrement `correctRune` if necessary
+                    // Check if the last rune was correct
                     if lastTypedIndex < len(m.PromptText) && currentRunes[lastTypedIndex] == rune(m.PromptText[lastTypedIndex]) {
-                        CorrectRune-- // Decrement if the last typed character was correct
                     }
 
                     // Remove the last rune from the user text
@@ -197,7 +201,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
             } else if len(msg.Runes) > 0 { //other keys
                 currentIndex := m.UserText.Len()
                 if currentIndex < len(m.PromptText) && rune(m.PromptText[currentIndex]) == msg.Runes[0]{
-                    CorrectRune++ // Increment correctRune here
                 }
                 m.UserText.WriteRune(msg.Runes[0])
 
@@ -208,6 +211,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
         if m.State == Results {
             if len(msg.Runes) > 0 && msg.Runes[0] == 'q' {
                 return m, tea.Quit
+            } else if len(msg.Runes) > 0 && msg.Runes[0] == 'r' {
+                m.State = PreProgram
+                return m, nil
             } else {
                 return m, nil
             }
@@ -215,7 +221,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     case cursorTick:
         //Toggle the cursor visible
         m.CursorVisible = !m.CursorVisible
-        return m, cursorCmd(450)
+        return m, cursorCmd(550)
 
     case tea.WindowSizeMsg:
         m.Width = msg.Width
@@ -231,16 +237,25 @@ func (m Model) View() string {
 	case PreProgram:
         title := titleStyle.Render("Select a Language")
 		options := lipgloss.JoinVertical(lipgloss.Left,
-			optionStyle.Render("\n[1] Go"),
-			optionStyle.Render("[2] Python"),
+			optionStyle.Render("[1] Go"),
+			optionStyle.Render("[2] C"),
 			optionStyle.Render("[3] C++"),
+			optionStyle.Render("[4] Python"),
+			optionStyle.Render("[5] Java"),
+			optionStyle.Render("[6] JavaScript"),
 		)
-        instructions := lipgloss.JoinVertical(lipgloss.Left,
-            instructionStyle.Render("\nUse number keys to pick a language."),
-            instructionStyle.Render("q: exit"),
+        
+        labels := lipgloss.JoinHorizontal(lipgloss.Bottom, 
+            labelStyle.Render(" q "), 
+            instructionStyle.Render(" exit"),
         )
 
-		return lipgloss.JoinVertical(lipgloss.Left, title, options, instructions)
+        instructions := lipgloss.JoinVertical(lipgloss.Left,
+            instructionStyle.Render("\nUse number keys to pick a language.\n"),
+            labels,
+        )
+
+		return wordwrap.String(lipgloss.JoinVertical(lipgloss.Left, title, options, instructions), m.Width)
 
     case TypingTUI:
         userInput := m.UserText.String()
@@ -252,8 +267,6 @@ func (m Model) View() string {
 
         // Update final WPM only if typing is not complete
         m.FinalWPM = CalculateWPM(userInput, m.StartTime)
-        //Calculate Accuracy
-        m.Accuracy = CalculateAccuracy(m.UserText.String(), CorrectRune)
 
         for i, r := range prompt {
             if i == cursorPosition && m.CursorVisible {
@@ -276,32 +289,44 @@ func (m Model) View() string {
         // Add WPM to the output
         renderedText.WriteString(wpmStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)))
 
+        renderedText.WriteString("\n\n")
         //renderedText.WriteString(fmt.Sprintf("\033[90m%s\033[0m","\n* Press any key to exit after finishing"))
-        renderedText.WriteString(instructionStyle.Render("\n* Ctrl-R: restart"))
+        renderedText.WriteString(labelStyle.Render(" Ctrl-R "))
+        renderedText.WriteString(instructionStyle.Render(" restart"))
 
         return wordwrap.String(renderedText.String() , m.Width)
 
     case Results:
+        //Calculate Accuracy
+        m.Accuracy = CalculateAccuracy(m.PromptText, m.UserText.String())
+
         // Render the styled elements using global styles
         title := titleStyle.Render("Typing Complete!")
         stats := lipgloss.JoinVertical(
             lipgloss.Left,
             statsStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)),
-            statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%", m.Accuracy)),
+            statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%\n\n", m.Accuracy)),
         )
+
+        labels := lipgloss.JoinHorizontal(lipgloss.Bottom, 
+            labelStyle.Render(" q "), 
+            instructionStyle.Render(" exit  "),
+            labelStyle.Render(" r "),
+            instructionStyle.Render(" restart  "),
+        )
+
         instructions := lipgloss.JoinVertical(
             lipgloss.Left,
-            instructionStyle.Render("Press q to exit."),
-            instructionStyle.Render("Press r to restart."),
+            labels,
         )
 
         // Combine all the parts into a single view
-        return lipgloss.JoinVertical(
+        return wordwrap.String(lipgloss.JoinVertical(
             lipgloss.Center,
             title,
             stats,
             instructions,
-        )
+        ), m.Width)
     }
     return ""
 }
@@ -320,10 +345,25 @@ func CalculateWPM(userText string, startTime time.Time) int {
 }
 
 //function to calculate accuracy
-func CalculateAccuracy(userText string, correctRune int) float64 {
-    totalRunes := []rune(userText)
+func CalculateAccuracy(userText string, prompt string) float64 {
 
-    return min(100.00,(float64(correctRune) / float64(len(totalRunes)))*100)
+    promptTrim := strings.TrimSpace(prompt)
+    promptReplaceTab := strings.ReplaceAll(promptTrim, "\t", "    ")//replace tab into 4 spaces
+
+    promptRunes := []rune(promptReplaceTab)
+    userRunes := []rune(userText)
+    
+    //find min length to avoid out of bound
+    length := min(len(promptRunes), len(userRunes))
+
+    match := 0
+    for i :=0; i < length; i++ {
+        if promptRunes[i] == userRunes[i] {
+            match++
+        }
+    }
+
+    return (float64(match)/float64(len(promptRunes)))*100
 }
 
 //Function to load prompt in main package

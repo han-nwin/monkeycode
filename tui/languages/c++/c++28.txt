@@ -1,0 +1,16 @@
+#include <iostream>
+template <typename T>
+class Box {
+    T data;
+public:
+    Box(T d) : data(d) {}
+    T getData() {
+        return data;
+    }
+};
+int main() {
+    Box<int> b(10);
+    std::cout << b.getData();
+    return 0;
+}
+

@@ -1,0 +1,11 @@
+#include <iostream>
+#include <thread>
+void add(int a, int b) {
+    std::cout << a + b;
+}
+int main() {
+    std::thread t(add, 3, 4);
+    t.join();
+    return 0;
+}
+

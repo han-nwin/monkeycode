@@ -1,0 +1,8 @@
+#include <iostream>
+int main() {
+    int x = 10;
+    double y = 5.5;
+    std::cout << "x: " << x << ", y: " << y << '\n';
+    return 0;
+}
+

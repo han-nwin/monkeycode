@@ -1,0 +1,11 @@
+#include <iostream>
+int main() {
+    int num = 10;
+    if (num > 5) {
+        std::cout << "Greater than 5";
+    } else {
+        std::cout << "Less or equal to 5";
+    }
+    return 0;
+}
+

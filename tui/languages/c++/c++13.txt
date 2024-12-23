@@ -1,0 +1,13 @@
+#include <iostream>
+void print(int x) {
+    std::cout << "Integer: " << x << '\n';
+}
+void print(double x) {
+    std::cout << "Double: " << x << '\n';
+}
+int main() {
+    print(5);
+    print(3.14);
+    return 0;
+}
+

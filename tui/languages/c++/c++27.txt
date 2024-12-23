@@ -1,0 +1,11 @@
+#include <iostream>
+template <typename T>
+void print(T data) {
+    std::cout << data;
+}
+int main() {
+    print(5);
+    print("Hello");
+    return 0;
+}
+

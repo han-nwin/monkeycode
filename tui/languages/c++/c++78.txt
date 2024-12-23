@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    int num = 5;  // Binary: 0101
+    int pos = 1;
+    num ^= (1 << pos);  // Toggle bit at position 1
+    std::cout << num;   // Output: 7
+    return 0;
+}
+

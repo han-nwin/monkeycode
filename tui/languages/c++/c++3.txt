@@ -1,0 +1,7 @@
+#include <iostream>
+int main() {
+    char c = 'A';
+    std::cout << "Character: " << c << '\n';
+    return 0;
+}
+

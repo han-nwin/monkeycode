@@ -1,0 +1,8 @@
+#include <iostream>
+int main() {
+    int x = 10;
+    auto lambda = [x]() { return x * 2; };
+    std::cout << lambda();  // Output: 20
+    return 0;
+}
+

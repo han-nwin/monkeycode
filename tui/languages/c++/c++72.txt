@@ -1,0 +1,11 @@
+#include <iostream>
+#include <regex>
+int main() {
+    std::string text = "C++ is powerful";
+    std::regex pattern("C\\+\\+");
+    if (std::regex_search(text, pattern)) {
+        std::cout << "Pattern found!";
+    }
+    return 0;
+}
+

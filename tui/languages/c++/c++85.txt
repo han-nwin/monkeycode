@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    int x = 5;
+    auto lambda = [&x]() { x *= 2; };
+    lambda();
+    std::cout << x;  // Output: 10
+    return 0;
+}
+

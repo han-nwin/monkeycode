@@ -1,0 +1,8 @@
+#include <stdio.h>
+int main() {
+    int num = 100;
+    int *ptr = &num;
+    printf("Value: %d, Address: %p
+", *ptr, ptr);
+    return 0;
+}

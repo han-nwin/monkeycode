@@ -1,0 +1,10 @@
+#include <iostream>
+#include <string>
+int main() {
+    std::string first = "Hello";
+    std::string second = "World";
+    std::string combined = first + " " + second;
+    std::cout << combined;
+    return 0;
+}
+

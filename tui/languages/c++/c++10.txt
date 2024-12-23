@@ -1,0 +1,9 @@
+#include <iostream>
+int main() {
+    int num = 0;
+    do {
+        std::cout << num++ << '\n';
+    } while (num < 3);
+    return 0;
+}
+

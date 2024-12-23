@@ -1,0 +1,10 @@
+#include <stdio.h>
+int main() {
+    char grade = 'B';
+    switch (grade) {
+        case 'A': printf("Excellent\n"); break;
+        case 'B': printf("Good\n"); break;
+        default: printf("Needs Improvement\n");
+    }
+    return 0;
+}

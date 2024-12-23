@@ -1,0 +1,11 @@
+#include <iostream>
+void increment(int& x) {
+    ++x;
+}
+int main() {
+    int value = 5;
+    increment(value);
+    std::cout << value;  // Output: 6
+    return 0;
+}
+

@@ -1,0 +1,10 @@
+#include <iostream>
+#include <future>
+int calculate() {
+    return 42;
+}
+int main() {
+    std::future<int> result = std::async(calculate);
+    std::cout << "Result: " << result.get();
+    return 0;
+}

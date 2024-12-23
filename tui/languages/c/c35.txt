@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node {
+    int data;
+    struct Node *next;
+};
+struct Node* addNode(struct Node *head, int data) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = head;
+    return newNode;
+}
+int main() {
+    struct Node *head = NULL;
+    head = addNode(head, 10);
+    head = addNode(head, 20);
+    struct Node *temp = head;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    free(head->next);
+    free(head);
+    return 0;
+}

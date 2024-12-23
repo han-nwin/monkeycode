@@ -1,0 +1,13 @@
+#include <iostream>
+class Person {
+public:
+    void greet() {
+        std::cout << "Hello!";
+    }
+};
+int main() {
+    Person p;
+    p.greet();
+    return 0;
+}
+

@@ -1,0 +1,20 @@
+#include <iostream>
+class Animal {
+public:
+    void eat() {
+        std::cout << "Eating...";
+    }
+};
+class Dog : public Animal {
+public:
+    void bark() {
+        std::cout << "Barking...";
+    }
+};
+int main() {
+    Dog d;
+    d.eat();
+    d.bark();
+    return 0;
+}
+

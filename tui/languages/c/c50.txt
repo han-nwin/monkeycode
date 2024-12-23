@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <pthread.h>
+void* printMessage(void *arg) {
+    printf("Thread says: %s
+", (char *)arg);
+    return NULL;
+}
+int main() {
+    pthread_t thread;
+    char *message = "Hello from thread!";
+    pthread_create(&thread, NULL, printMessage, (void *)message);
+    pthread_join(thread, NULL);
+    return 0;
+}

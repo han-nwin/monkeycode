@@ -1,0 +1,11 @@
+#include <iostream>
+int& getElement(int arr[], int index) {
+    return arr[index];
+}
+int main() {
+    int arr[3] = {1, 2, 3};
+    getElement(arr, 1) = 10;
+    std::cout << arr[1];  // Output: 10
+    return 0;
+}
+

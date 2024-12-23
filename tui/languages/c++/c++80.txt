@@ -1,0 +1,9 @@
+#include <iostream>
+bool isPowerOfTwo(int num) {
+    return (num > 0) && ((num & (num - 1)) == 0);
+}
+int main() {
+    std::cout << isPowerOfTwo(16);  // Output: 1 (true)
+    return 0;
+}
+

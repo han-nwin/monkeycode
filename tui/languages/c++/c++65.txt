@@ -1,0 +1,12 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+int main() {
+    std::vector<int> vec = {5, 1, 4, 2, 3};
+    std::sort(vec.begin(), vec.end());
+    for (int i : vec) {
+        std::cout << i << ' ';
+    }
+    return 0;
+}
+

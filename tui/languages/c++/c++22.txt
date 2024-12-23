@@ -1,0 +1,19 @@
+#include <iostream>
+class Shape {
+public:
+    virtual double area() = 0;
+};
+class Rectangle : public Shape {
+    double width, height;
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+    double area() override {
+        return width * height;
+    }
+};
+int main() {
+    Rectangle r(4, 5);
+    std::cout << r.area();
+    return 0;
+}
+

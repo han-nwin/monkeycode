@@ -1,0 +1,8 @@
+#include <iostream>
+int main() {
+    int num = 5;  // Binary: 0101
+    std::cout << (num << 1);  // Left shift: 1010 (10)
+    std::cout << (num & 1);   // Check if odd: 1
+    return 0;
+}
+

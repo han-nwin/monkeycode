@@ -1,0 +1,11 @@
+#include <iostream>
+#include <thread>
+void printMessage() {
+    std::cout << "Hello from thread";
+}
+int main() {
+    std::thread t(printMessage);
+    t.join();
+    return 0;
+}
+

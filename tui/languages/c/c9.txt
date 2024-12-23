@@ -1,0 +1,8 @@
+#include <stdio.h>
+void sayHello() {
+    printf("Hello, Function!\n");
+}
+int main() {
+    sayHello();
+    return 0;
+}

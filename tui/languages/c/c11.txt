@@ -1,0 +1,8 @@
+#include <stdio.h>
+int square(int num) {
+    return num * num;
+}
+int main() {
+    printf("Square: %d\n", square(4));
+    return 0;
+}

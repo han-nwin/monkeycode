@@ -1,0 +1,13 @@
+#include <iostream>
+void display(const char* str) {
+    std::cout << str << '\n';
+}
+void display(int n) {
+    std::cout << "Number: " << n << '\n';
+}
+int main() {
+    display("Hello");
+    display(10);
+    return 0;
+}
+

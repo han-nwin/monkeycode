@@ -1,0 +1,7 @@
+#include <iostream>
+int main() {
+    int num = 42;
+    std::cout << "Number is " << num << '\n';
+    return 0;
+}
+

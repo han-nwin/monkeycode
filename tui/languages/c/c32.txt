@@ -1,0 +1,15 @@
+#include <stdio.h>
+int main() {
+    FILE *file = fopen("example.txt", "w+");
+    if (file == NULL) {
+        return 1;
+    }
+    fputs("This is a test.
+", file);
+    rewind(file);
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file))
+        printf("%s", buffer);
+    fclose(file);
+    return 0;
+}

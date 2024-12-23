@@ -1,0 +1,19 @@
+#include <iostream>
+class Person {
+public:
+    virtual void display() {
+        std::cout << "Person";
+    }
+};
+class Student : public Person {
+public:
+    void display() override {
+        std::cout << "Student";
+    }
+};
+int main() {
+    Student s;
+    s.display();
+    return 0;
+}
+

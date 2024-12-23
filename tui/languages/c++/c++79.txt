@@ -1,0 +1,14 @@
+#include <iostream>
+int countSetBits(int num) {
+    int count = 0;
+    while (num) {
+        count += num & 1;
+        num >>= 1;
+    }
+    return count;
+}
+int main() {
+    std::cout << countSetBits(7);  // Output: 3
+    return 0;
+}
+

@@ -1,0 +1,11 @@
+#include <iostream>
+struct Point {
+    int x, y;
+    Point(int xCoord, int yCoord) : x(xCoord), y(yCoord) {}
+};
+int main() {
+    Point p(3, 4);
+    std::cout << "x: " << p.x << ", y: " << p.y;
+    return 0;
+}
+

@@ -1,0 +1,15 @@
+#include <stdio.h>
+int main() {
+    FILE *file = fopen("data.bin", "wb");
+    int nums[] = {1, 2, 3};
+    fwrite(nums, sizeof(int), 3, file);
+    fclose(file);
+
+    file = fopen("data.bin", "rb");
+    int readNums[3];
+    fread(readNums, sizeof(int), 3, file);
+    for (int i = 0; i < 3; i++)
+        printf("%d ", readNums[i]);
+    fclose(file);
+    return 0;
+}

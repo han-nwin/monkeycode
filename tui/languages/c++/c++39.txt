@@ -1,0 +1,14 @@
+#include <iostream>
+#include <fstream>
+int main() {
+    std::fstream file("data.txt", std::ios::out | std::ios::in | std::ios::trunc);
+    file << "123";
+    file.seekg(0);
+    char ch;
+    while (file.get(ch)) {
+        std::cout << ch;
+    }
+    file.close();
+    return 0;
+}
+

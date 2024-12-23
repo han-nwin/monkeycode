@@ -1,0 +1,17 @@
+#include <iostream>
+#include <future>
+#include <vector>
+int task(int n) {
+    return n * n;
+}
+int main() {
+    std::vector<std::future<int>> results;
+    for (int i = 1; i <= 5; ++i) {
+        results.push_back(std::async(task, i));
+    }
+    for (auto& res : results) {
+        std::cout << res.get() << '\n';
+    }
+    return 0;
+}
+

@@ -1,0 +1,10 @@
+#include <stdio.h>
+void increment(int *num) {
+    (*num)++;
+}
+int main() {
+    int val = 5;
+    increment(&val);
+    printf("Incremented Value: %d\n", val);
+    return 0;
+}

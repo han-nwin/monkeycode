@@ -1,0 +1,13 @@
+#include <stdio.h>
+int main() {
+    FILE *file = fopen("data.txt", "r+");
+    if (file == NULL) {
+        printf("Error opening file!
+");
+        return 1;
+    }
+    fprintf(file, "Writing into the file.
+");
+    fclose(file);
+    return 0;
+}

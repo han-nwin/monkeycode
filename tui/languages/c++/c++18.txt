@@ -1,0 +1,15 @@
+#include <iostream>
+class Car {
+    std::string brand;
+public:
+    Car(std::string b) : brand(b) {}
+    void showBrand() {
+        std::cout << brand;
+    }
+};
+int main() {
+    Car c("Toyota");
+    c.showBrand();
+    return 0;
+}
+

@@ -1,0 +1,20 @@
+#include <iostream>
+class Parent {
+public:
+    void identify() {
+        std::cout << "Parent";
+    }
+};
+class Child : public Parent {
+public:
+    void identify() {
+        std::cout << "Child";
+    }
+};
+int main() {
+    Parent* p = new Child();
+    p->identify();
+    delete p;
+    return 0;
+}
+

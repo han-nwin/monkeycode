@@ -1,0 +1,15 @@
+#include <iostream>
+class Circle {
+    double radius;
+public:
+    Circle() : radius(1.0) {}
+    double area() {
+        return 3.14 * radius * radius;
+    }
+};
+int main() {
+    Circle c;
+    std::cout << c.area();
+    return 0;
+}
+
