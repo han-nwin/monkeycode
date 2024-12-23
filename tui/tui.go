@@ -19,18 +19,25 @@ var (
 	// Title style 
 	titleStyle = lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#F5C2E7")). // Pinkish-purple (Rosewater)
-		Background(lipgloss.Color("#1E1E2E")). // Dark background (Base)
-		Padding(1, 1)
+		Foreground(lipgloss.Color("#CCD0DA")). //
+		Background(lipgloss.Color("#8839EF")). //
+		Padding(-1, 1)
+ 
+	// Title style 
+	titleStyle2 = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("#CCD0DA")). //
+		Background(lipgloss.Color("#179299")). //
+		Padding(-1, 1)
 
 	// Option style 
 	optionStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#8AADF4")). // Soft blue (Blue)
+		Foreground(lipgloss.Color("#74C7EC")). // Saphire
 		PaddingLeft(2)
 
 	// Stats style 
 	statsStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#F9E2AF")). // Yellow
+		Foreground(lipgloss.Color("#94E2D5")). // Teal
 		Bold(true).
 		PaddingLeft(1)
 
@@ -118,7 +125,7 @@ type Model struct {
 
 //Init model
 func (m Model) Init() tea.Cmd {
-    return cursorCmd(600)
+    return cursorCmd(400)
 }
 
 //Update logic
@@ -221,7 +228,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     case cursorTick:
         //Toggle the cursor visible
         m.CursorVisible = !m.CursorVisible
-        return m, cursorCmd(550)
+        return m, cursorCmd(400)
 
     case tea.WindowSizeMsg:
         m.Width = msg.Width
@@ -236,8 +243,9 @@ func (m Model) View() string {
 	switch m.State {
 	case PreProgram:
         title := titleStyle.Render("Select a Language")
+        title = "\n" + title
 		options := lipgloss.JoinVertical(lipgloss.Left,
-			optionStyle.Render("[1] Go"),
+			optionStyle.Render("\n[1] Go"),
 			optionStyle.Render("[2] C"),
 			optionStyle.Render("[3] C++"),
 			optionStyle.Render("[4] Python"),
@@ -255,7 +263,7 @@ func (m Model) View() string {
             labels,
         )
 
-		return wordwrap.String(lipgloss.JoinVertical(lipgloss.Left, title, options, instructions), m.Width)
+		return wordwrap.String(lipgloss.JoinVertical(lipgloss.Center, title, options, instructions), m.Width)
 
     case TypingTUI:
         userInput := m.UserText.String()
@@ -294,17 +302,29 @@ func (m Model) View() string {
         renderedText.WriteString(labelStyle.Render(" Ctrl-R "))
         renderedText.WriteString(instructionStyle.Render(" restart"))
 
-        return wordwrap.String(renderedText.String() , m.Width)
+        // Wrap the user input and prompt section to be aligned left
+        contentBlock := lipgloss.NewStyle().
+            Align(lipgloss.Left).
+            Render(renderedText.String())
+
+        // Center the entire content block (including WPM and instructions)
+        centeredContent := lipgloss.NewStyle().
+            Width(m.Width).
+            Height(m.Height).
+            Align(lipgloss.Center).
+            Render(contentBlock)
+
+        return centeredContent
 
     case Results:
         //Calculate Accuracy
         m.Accuracy = CalculateAccuracy(m.PromptText, m.UserText.String())
 
         // Render the styled elements using global styles
-        title := titleStyle.Render("Typing Complete!")
+        title := titleStyle2.Render("Typing Complete!")
         stats := lipgloss.JoinVertical(
             lipgloss.Left,
-            statsStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)),
+            statsStyle.Render(fmt.Sprintf("\nWPM: %d", m.FinalWPM)),
             statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%\n\n", m.Accuracy)),
         )
 
