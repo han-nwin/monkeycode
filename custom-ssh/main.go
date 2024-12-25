@@ -64,7 +64,7 @@ func main() {
 	}
 	config.AddHostKey(private)
 
-	listener, err := net.Listen("tcp", "127.0.0.1:2222")
+    listener, err := net.Listen("tcp", "127.0.0.1:2222")
 	if err != nil {
 		log.Fatalf("Failed to listen for connections: %v", err)
 	}
@@ -79,55 +79,61 @@ func main() {
 			continue
 		}
 
-		go handleConnection(conn, config)
-	}
-}
-
-func handleConnection(conn net.Conn, config *ssh.ServerConfig) {
-	defer conn.Close()
-
-	// Perform SSH handshake
-	sshConn, channels, requests, err := ssh.NewServerConn(conn, config)
-	if err != nil {
-		log.Printf("Failed to handshake: %v", err)
-		return
-	}
-	defer sshConn.Close()
-	log.Printf("New SSH connection from %s", sshConn.RemoteAddr())
-
-	// Discard global requests
-	go ssh.DiscardRequests(requests)
-
-	// Handle channels
-	for newChannel := range channels {
-		if newChannel.ChannelType() != "session" {
-			newChannel.Reject(ssh.UnknownChannelType, "unsupported channel type")
-			continue
-		}
-
-		channel, _, err := newChannel.Accept()
+		// Perform SSH handshake
+		sshConn, chans, reqs, err := ssh.NewServerConn(conn, config)
 		if err != nil {
-			log.Printf("Could not accept channel: %v", err)
+			log.Printf("Failed to handshake: %v", err)
+			conn.Close()
 			continue
 		}
-		go handleChannel(channel)
+
+		// Handle incoming channels (e.g., terminal sessions)
+		go handleConnection(sshConn, chans, reqs)
 	}
 }
 
-func handleChannel(channel ssh.Channel) {
-	defer channel.Close()
+// Handle SSH connection and session setup
+func handleConnection(conn ssh.Conn, chans <-chan ssh.NewChannel, reqs <-chan *ssh.Request) {
+	for newChannel := range chans {
+		// Accept the channel of type "session"
+		if newChannel.ChannelType() == "session" {
+			channel, _, err := newChannel.Accept()
+			if err != nil {
+				log.Printf("could not accept channel: %v", err)
+				continue
+			}
 
-	// Automatically start a shell
-	cmd := "/usr/bin/bash"
-
-	// Set the channel as stdin/stdout/stderr for the shell process
-	shell := exec.Command(cmd)
-	shell.Stdin = channel
-	shell.Stdout = channel
-	shell.Stderr = channel
-
-	// Run the shell
-	if err := shell.Run(); err != nil {
-		log.Printf("Error running shell: %v", err)
+			// Handle requests for this channel
+			go func() {
+				for req := range reqs {
+					go handleRequest(channel, req)
+				}
+			}()
+		}
 	}
 }
+
+// Handle incoming SSH requests
+func handleRequest(channel ssh.Channel, req *ssh.Request) {
+	switch req.Type {
+	case "exec":
+		// Handle exec command for terminal interaction
+		cmd := exec.Command("bash")
+		cmd.Env = append(os.Environ(), "TERM=xterm-256color")
+		cmd.Stdin = channel
+		cmd.Stdout = channel
+		cmd.Stderr = channel
+
+		if err := cmd.Start(); err != nil {
+			log.Printf("failed to start bash: %v", err)
+			channel.Write([]byte("Failed to start bash\n"))
+			return
+		}
+
+		// Wait for the command to finish
+		if err := cmd.Wait(); err != nil {
+			log.Printf("failed to wait for bash process: %v", err)
+		}
+	}
+}
+
