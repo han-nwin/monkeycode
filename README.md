@@ -5,7 +5,7 @@ MonkeyCode is a terminal-based typing test tool for developers, where users prac
 The project also includes an SSH server directory, allowing users to connect and use the app remotely over SSH.
 
 ## Why? 
-### Because, I WANTED something like this for so long as a programmer.
+### Because, as a programmer, I have been wanting something like this for so long.
 
 Typing speed test apps such as monkeytype, typingspeedtest, 10fastfinger, etc. are often limited to plain text, missing the unique challenges of coding syntax. I can type fast (avg. 100wpm) on these normal typing speed app, but when often that doesn't translate to wrting code since you don't get to practice typing other character such as: (), {}, ;, <>, [], etc. and other unique combination often only show in code, not just a text document and I don't plan to write word docs for a living (jk).
 
