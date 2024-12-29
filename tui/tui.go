@@ -70,7 +70,7 @@ var (
 
 	// WPM style
 	wpmStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#A6E3A1")). // Lime green (Green)
+			Foreground(lipgloss.Color("#FAB387")). // Peach
 			Bold(true)
 )
 
@@ -238,7 +238,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     case cursorTick:
         //Toggle the cursor visible
         m.CursorVisible = !m.CursorVisible
-        return m, cursorCmd(550)
+        return m, cursorCmd(400)
 
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
@@ -285,31 +285,6 @@ func (m Model) View() string {
 		// Inject cursor at the next untyped position
 		cursorPosition := len(userInput)
 
-        for i, r := range prompt {
-            if i == cursorPosition && m.CursorVisible {
-                renderedText.WriteString(cursorStyle.Render("|")) // Add the styled cursor
-            }
-            if i < len(userInput) {
-                if rune(userInput[i]) == r {
-                    // Correct character
-                    renderedText.WriteString(correctCharStyle.Render(string(r)))
-                } else {
-                    // Incorrect character
-                    if userInput[i] == ' ' {
-                        renderedText.WriteString(incorrectCharStyle.Render(string('\u2588')))
-                    } else {
-                        renderedText.WriteString(incorrectCharStyle.Render(string(userInput[i])))
-                    }
-                }
-            } else {
-                // Untyped character
-                renderedText.WriteString(untypedCharStyle.Render(string(r)))
-            }
-        }
-        renderedText.WriteString("\n\n")
-        // Add WPM to the output
-        renderedText.WriteString(wpmStyle.Render(fmt.Sprintf("WPM: %d", m.WPM)))
-
 		for i, r := range prompt {
 			if i == cursorPosition && m.CursorVisible {
 				renderedText.WriteString(cursorStyle.Render("|")) // Add the styled cursor
@@ -319,8 +294,13 @@ func (m Model) View() string {
 					// Correct character
 					renderedText.WriteString(correctCharStyle.Render(string(r)))
 				} else {
-					// Incorrect character
-					renderedText.WriteString(incorrectCharStyle.Render(string(userInput[i])))
+                    if userInput[i] == ' ' || userInput[i] == '\n' {
+                        //Incorrect white space
+                        renderedText.WriteString(incorrectCharStyle.Render(string('\u2588')))
+                    } else {
+                        // Incorrect character
+                        renderedText.WriteString(incorrectCharStyle.Render(string(userInput[i])))
+                    }
 				}
 			} else {
 				// Untyped character
@@ -329,11 +309,11 @@ func (m Model) View() string {
 		}
 		renderedText.WriteString("\n\n")
 		// Add WPM to the output
-		renderedText.WriteString(wpmStyle.Render(fmt.Sprintf("WPM: %d", m.FinalWPM)))
+        wpm := (wpmStyle.Render(fmt.Sprintf("\nWPM: %d\n\n", m.WPM)))
 
-        renderedText.WriteString(labelStyle.Render(" Ctrl-C "))
-        renderedText.WriteString(instructionStyle.Render(" quit "))
-        return wordwrap.String(renderedText.String() , m.Width)
+		//renderedText.WriteString("\n\n")
+        label := (labelStyle.Render(" Ctrl-C "))
+        instruct := (instructionStyle.Render(" quit "))
 
 		// Wrap the user input and prompt section to be aligned left
 		contentBlock := lipgloss.NewStyle().
@@ -345,17 +325,10 @@ func (m Model) View() string {
 			Width(m.Width).
 			Height(m.Height).
 			Align(lipgloss.Center).
-			Render(contentBlock)
+			Render(contentBlock,wpm, label, instruct)
 
-        labels := lipgloss.JoinHorizontal(lipgloss.Bottom, 
-            labelStyle.Render(" q "), 
-            instructionStyle.Render(" exit  "),
-            labelStyle.Render(" r "),
-            instructionStyle.Render(" restart  "),
-            labelStyle.Render(" s "), 
-            instructionStyle.Render(" save results "),
-        )
-		return centeredContent
+
+		return wordwrap.String(centeredContent, m.Width)
 
 	case Results:
 		//Calculate Accuracy
@@ -365,7 +338,7 @@ func (m Model) View() string {
 		title := titleStyle2.Render("Typing Complete!")
 		stats := lipgloss.JoinVertical(
 			lipgloss.Left,
-			statsStyle.Render(fmt.Sprintf("\nWPM: %d", m.FinalWPM)),
+			statsStyle.Render(fmt.Sprintf("\nWPM: %d", m.WPM)),
 			statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%\n\n", m.Accuracy)),
 		)
 
@@ -374,6 +347,8 @@ func (m Model) View() string {
 			instructionStyle.Render(" exit  "),
 			labelStyle.Render(" r "),
 			instructionStyle.Render(" restart  "),
+            labelStyle.Render(" s "), 
+            instructionStyle.Render(" save results "),
 		)
 
 		instructions := lipgloss.JoinVertical(
@@ -466,7 +441,7 @@ func NewProgram()  *tea.Program {
         CursorPosition: 0,
         Width:          80,
         Height:         20,
-        WPM:       0,
+        WPM:            0,
         Accuracy:       0,
     }
 
