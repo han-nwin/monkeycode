@@ -21,14 +21,14 @@ import (
 
 const (
 	host = "localhost"
-	port = "23234"
+	port = "2222"
 )
 
 func main() {
 	// Create the Wish SSH server
 	server, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath("~/.ssh/id_ed25519"), // Path to your SSH host key
+		wish.WithHostKeyPath(".ssh/id_ed25519"), // Path to your SSH host key
 		wish.WithMiddleware(
             bubbletea.Middleware(teaHandler),
 			logging.Middleware(),
@@ -64,17 +64,16 @@ func main() {
 // You can write your own custom bubbletea middleware that wraps tea.Program.
 // Make sure you set the program input and output to ssh.Session.
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
-    // Load the typing prompt using the shared TUI function
-    prompt := tui.LoadPrompt()
 
     // Create the Bubble Tea model
     model := tui.Model{
-        PromptText:    prompt,
-        UserText:      &strings.Builder{},
-        CursorVisible: true,
-        StartTime:     time.Now(),
-        Width:         80, // Default terminal width; can be updated dynamically
-        Height:        24, // Default terminal height
+        PromptText:     "",
+        UserText:       &strings.Builder{},
+        CursorVisible:  true,
+        CursorPosition: 0,
+        Width:          80,
+        Height:         20,
+        FinalWPM:       0,
     }
 
     // Initialize the Bubble Tea program options
