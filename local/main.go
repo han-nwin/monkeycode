@@ -35,7 +35,7 @@ func main() {
 
     }
 
-    time.Sleep(2*time.Second) //Sleep for 2 sec before running TUI
+    time.Sleep(0*time.Second) //Sleep for 2 sec before running TUI
     //CREATE and RUN TUI program
     program := tui.NewProgram()
     //run program
