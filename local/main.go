@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/han-nwin/monkeycode/tui"
+	"github.com/han-nwin/monkeycode/profiles"
 )
 
 var (
@@ -30,7 +31,7 @@ func main() {
     
     //TODO: If no -user provided, check if there's a lastActiveProfile
     if *usernameFlag != "" {
-
+        profiles.
     } else { //if user flag provided load or create new profile
 
     }
