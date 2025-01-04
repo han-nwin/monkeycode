@@ -13,6 +13,7 @@ import (
 var (
     usernameFlag = flag.String("u", "", "Specify a user name")
     leaderboardFlag = flag.Bool("l", false, "Display leaderboard.")
+    currentUserFlag = flag.Bool("c" , false, "Display current user.")
 )
 
 
@@ -37,6 +38,19 @@ func main() {
 		}
 		return
 	}
+
+    //Show last active profile if currentUserFlag is set
+    if *currentUserFlag {
+        allProfiles, err = backend.LoadAllProfiles();
+        lastActiveUserName := allProfiles.LastActiveProfile;
+        fmt.Printf("Current(last active) user: %s \n", lastActiveUserName)
+        
+        profile,_ = backend.LoadProfile(lastActiveUserName)
+        fmt.Printf("Average WPM: %.2f \n", profile.AverageTypingSpeed())
+        fmt.Printf("Average Accuracy: %.2f%%\n", profile.AverageAccuracy())
+
+        return
+    }
 
     // Check if a username is provided
     if *usernameFlag != "" {
@@ -95,10 +109,9 @@ func main() {
 
     // Program Exit Logic
     if finalModel, ok := exitModel.(tui.Model); ok {
-        fmt.Printf("Final WPM: %d\n", finalModel.WPM)
-        fmt.Printf("Accuracy: %.2f%%\n", finalModel.Accuracy)
         fmt.Printf("Saved WPM: %d\n", finalModel.SavedWPM)
         fmt.Printf("Saved Accuracy: %.2f%%\n", finalModel.SavedAccuracy)
+        fmt.Println();
 
         // Append WPM and Accuracy to the profile
         profile.TypingSpeed = append(profile.TypingSpeed, finalModel.SavedWPM...)
