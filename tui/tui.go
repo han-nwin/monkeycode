@@ -127,7 +127,7 @@ type Model struct {
 
 // Init model
 func (m Model) Init() tea.Cmd {
-	return cursorCmd(400)
+	return cursorCmd(450)
 }
 
 // Update logic
@@ -238,7 +238,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     case cursorTick:
         //Toggle the cursor visible
         m.CursorVisible = !m.CursorVisible
-        return m, cursorCmd(400)
+        return m, cursorCmd(450)
 
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
@@ -312,8 +312,8 @@ func (m Model) View() string {
         wpm := (wpmStyle.Render(fmt.Sprintf("\nWPM: %d\n\n", m.WPM)))
 
 		//renderedText.WriteString("\n\n")
-        label := (labelStyle.Render(" Ctrl-C "))
-        instruct := (instructionStyle.Render(" quit "))
+        label := (labelStyle.Render(" Ctrl-R "))
+        instruct := (instructionStyle.Render(" restart "))
 
 		// Wrap the user input and prompt section to be aligned left
 		contentBlock := lipgloss.NewStyle().

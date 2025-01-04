@@ -11,21 +11,32 @@ import (
 )
 
 var (
-    usernameFlag = flag.String("user", "", "Specify a user name")
+    usernameFlag = flag.String("u", "", "Specify a user name")
+    leaderboardFlag = flag.Bool("l", false, "Display leaderboard.")
 )
 
 
 func main() {
     flag.Parse()
 
-    // Initialize the backend
-    backend := profiles.NewLocalProfileBackend()
-
     // Declare variables
     var (
+        allProfiles *profiles.Profiles
         profile *profiles.Profile
         err     error
     )
+    
+    // Initialize the backend
+    backend := profiles.NewLocalProfileBackend()
+
+	// Display leaderboard if the flag is set
+	if *leaderboardFlag {
+		err := profiles.DisplayLeaderboard(backend, 100) //Display 100 profiles
+		if err != nil {
+			fmt.Printf("Error displaying leaderboard: %v\n", err)
+		}
+		return
+	}
 
     // Check if a username is provided
     if *usernameFlag != "" {
@@ -54,7 +65,6 @@ func main() {
         }
 
     } else {
-        var allProfiles *profiles.Profiles
         allProfiles, err = backend.LoadAllProfiles()
         if err != nil {
             fmt.Printf("Error loading profiles: %v\n", err)
@@ -62,7 +72,7 @@ func main() {
         }
 
         if allProfiles.LastActiveProfile == "" {
-            fmt.Println("No last active profile found. Please specify a new user with: \nmonkeycode -user <username>")
+            fmt.Println("No last active profile found. Please specify a new user with: \nmonkeycode -u <username>")
             return
         }
 
