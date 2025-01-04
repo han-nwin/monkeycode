@@ -11,12 +11,13 @@ type Profile struct {
 // ALL Profiles 
 type Profiles struct {
     Users []Profile `json:"users"`
-    LastActiveProfile Profile `json:"last_active_profile"`
+    LastActiveProfile string `json:"last_active_profile"`
 }
 
 //== Backend Interface for both Local and SSH ==//
 type ProfilesBackEnd interface {
-    SaveProfiles(*Profiles) error // Save Profiles struct
     LoadProfile(userName string) (*Profile, error) // Load 0 or 1 Profile
     LoadALLProfiles() //Use for leaderboard functionality
+    SaveProfile(profile *Profile) error // Save one profile struct
+    SaveAllProfiles(profiles *Profiles) error //Sava ALL profiles
 }
