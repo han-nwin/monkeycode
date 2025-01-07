@@ -15,7 +15,30 @@ On top of the program that you can run natively on your machine, with the includ
 
 ## Installation (Local)
 ```bash
-git clone https://github.com/han-nwin/monkeycode.git
-go build local/main.go -o monkeycode
+go install github.com/han-nwin/monkeycode/local@latest
+mv "$(go env GOPATH)/bin/local" "$(go env GOPATH)/bin/monkeycode"
 ```
+
+## Usage
+### Create a user profile
+```bash
+monkeycode -u <user-name>
+```
+### Run the program
+```bash
+monkeycode
+```
+### Switch profile or create new profile
+```bash
+monkeycode -u <user-name>
+```
+### Show current user
+```bash
+monkeycode -c
+```
+### Display Leaderboard
+```bash
+monkeycode -l
+```
+
 
