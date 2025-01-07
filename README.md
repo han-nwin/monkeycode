@@ -12,3 +12,10 @@ Typing speed test apps such as monkeytype, typingspeedtest, 10fastfingers, etc. 
 MonkeyCode fills this gap by providing a typing test designed specifically for developers, with realistic code snippets that help improve typing speed and accuracy in real-world coding scenarios. As a CLI tool, it can help you and me be more engaged with the terminal, something that I think is super important for a programmer.
 
 On top of the program that you can run natively on your machine, with the included SSH server setup, MonkeyCode enables a collaborative and shared experience, making it ideal for coding bootcamps, hackathons, and remote practice.
+
+## Installation (Local)
+```bash
+git clone https://github.com/han-nwin/monkeycode.git
+go build local/main.go -o monkeycode
+```
+
