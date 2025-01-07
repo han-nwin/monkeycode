@@ -4,6 +4,8 @@ MonkeyCode is a terminal-based typing test tool for developers inspired by the p
 
 The project also includes an SSH server directory, allowing users to connect and use the app remotely over SSH.
 
+![Demo](demo.gif)
+
 ## Why? 
 ### Because, as a programmer, I have been wanting something like this for so long.
 
