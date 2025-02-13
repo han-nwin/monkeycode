@@ -85,7 +85,8 @@ func renderBackground(width, height int, color string) string {
 }
 
 // Embed all files in the languages directory
-//
+// NOTE: Embedded files implementation
+
 //go:embed languages/**/*
 var embeddedFiles embed.FS
 

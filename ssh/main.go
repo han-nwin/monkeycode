@@ -44,6 +44,7 @@ func main() {
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	// Start the SSH server
+    // TODO: SSH isn't taking keystrokes
 	fmt.Printf("SSH server started on %s:%s\n", host, port)
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
