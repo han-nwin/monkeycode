@@ -1,6 +1,6 @@
 # MonkeyCode - A typing test CLI program but you get to code 🧑🏻‍💻 >_
 
-MonkeyCode is a terminal-based typing test tool for developers inspired by the popular monkeytype typing app, where programmers practice typing by writing actual code in their favorite programming languages. Choose from languages like Go, C/C++, Python, Java, JavaScript, etc. and challenge yourself with real coding tasks while tracking your Words Per Minute (WPM) and Accuracy.
+MonkeyCode is a terminal-based typing test tool for developers inspired by the popular monkeytype typing app, where programmers practice typing by writing actual code in their favorite programming languages. Choose from languages like Go, C/C++, Python, Java, JavaScript, TypeScript etc. and challenge yourself with real coding tasks while tracking your Words Per Minute (WPM) and Accuracy.
 
 Monkeycode is not just a platform for practicing typing; it's a new way to learn a new programming language or refresh your knowledge of an old one. By providing carefully curated code snippets, Monkeycode helps users reinforce syntax, improve coding speed, and build muscle memory in a hands-on, interactive manner.
 
