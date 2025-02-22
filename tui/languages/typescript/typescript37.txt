@@ -1,0 +1,17 @@
+class DelayedLogger {
+  message: string;
+
+  constructor(message: string) {
+    this.message = message;
+  }
+
+  logMessage = () => {
+    setTimeout(() => {
+      console.log(`Message: ${this.message}`);
+    }, 1000);
+  };
+}
+
+const logger = new DelayedLogger("Hello after 1 second");
+logger.logMessage();
+

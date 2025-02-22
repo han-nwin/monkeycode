@@ -1,0 +1,15 @@
+type User = {
+  id: number;
+  name: string;
+};
+
+const users: User[] = [
+  { id: 1, name: "Alice" },
+  { id: 2, name: "Bob" },
+  { id: 3, name: "Charlie" }
+];
+
+// Find a user by ID
+const user = users.find(u => u.id === 2);
+console.log(user); // { id: 2, name: "Bob" }
+

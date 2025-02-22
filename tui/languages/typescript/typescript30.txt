@@ -1,0 +1,7 @@
+function createMultiplier(multiplier: number) {
+  return (num: number) => num * multiplier;
+}
+
+const double = createMultiplier(2);
+console.log(double(10)); // 20
+

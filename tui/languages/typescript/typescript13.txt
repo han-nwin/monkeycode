@@ -1,0 +1,14 @@
+const numbers: number[] = [10, 20, 30, 40, 50];
+
+// Find first element greater than 25
+const found = numbers.find(num => num > 25);
+console.log(found); // 30
+
+// Get index of a value
+const index = numbers.indexOf(40);
+console.log(index); // 3
+
+// Check if an item exists
+const exists = numbers.includes(20);
+console.log(exists); // true
+

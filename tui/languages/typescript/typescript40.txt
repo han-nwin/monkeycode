@@ -1,0 +1,17 @@
+interface Animal {
+  name: string;
+  sound: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+const myDog: Dog = {
+  name: "Buddy",
+  sound: "Woof",
+  breed: "Golden Retriever"
+};
+
+console.log(myDog.breed); // "Golden Retriever"
+

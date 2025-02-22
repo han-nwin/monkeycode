@@ -322,6 +322,7 @@ func (m Model) View() string {
 			optionStyle.Render("[4] Python"),
 			optionStyle.Render("[5] Java"),
 			optionStyle.Render("[6] JavaScript"),
+			optionStyle.Render("[7] TypeScript"),
 		)
 
 		labels := lipgloss.JoinHorizontal(lipgloss.Bottom,

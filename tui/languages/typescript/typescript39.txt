@@ -1,0 +1,17 @@
+interface Car {
+  brand: string;
+  speed: number;
+  accelerate(amount: number): void; // Method declaration
+}
+
+const myCar: Car = {
+  brand: "Tesla",
+  speed: 100,
+  accelerate(amount) {
+    this.speed += amount;
+    console.log(`New speed: ${this.speed} km/h`);
+  }
+};
+
+myCar.accelerate(20); // "New speed: 120 km/h"
+

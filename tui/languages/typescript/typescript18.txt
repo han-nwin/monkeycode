@@ -1,0 +1,17 @@
+interface Car {
+  make: string
+  model: string
+  year: number
+}
+
+type Book = {
+  title: string
+  author: string
+  pages: number
+}
+
+const myCar: Car = { make: "Toyota", model: "Corolla", year: 2022 }
+const myBook: Book = { title: "1984", author: "George Orwell", pages: 328 }
+
+console.log(myCar, myBook)
+

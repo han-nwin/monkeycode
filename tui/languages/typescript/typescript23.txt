@@ -1,0 +1,10 @@
+type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE"
+
+const sendRequest = (method: HTTPMethod): void => {
+  console.log(`Sending ${method} request`)
+}
+
+sendRequest("GET")
+sendRequest("POST")
+// sendRequest("PATCH") // ❌ Error: Not allowed
+

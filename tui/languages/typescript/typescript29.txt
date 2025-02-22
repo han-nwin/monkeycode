@@ -1,0 +1,7 @@
+function applyOperation(a: number, b: number, operation: (x: number, y: number) => number): number {
+  return operation(a, b);
+}
+
+const multiply = (x: number, y: number) => x * y;
+console.log(applyOperation(5, 3, multiply)); // 15
+

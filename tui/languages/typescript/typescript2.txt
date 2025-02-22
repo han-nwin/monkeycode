@@ -1,0 +1,8 @@
+const inferredString = "I am inferred as a string" // TypeScript infers `string`
+const explicitNumber: number = 100 // Explicit annotation
+
+function add(a: number, b: number): number {
+  return a + b
+}
+
+console.log(add(5, 10))

@@ -1,0 +1,15 @@
+const transactions = [
+  { type: "income", amount: 1000 },
+  { type: "expense", amount: 200 },
+  { type: "income", amount: 500 },
+  { type: "expense", amount: 100 },
+];
+
+// Get total income
+const totalIncome = transactions
+  .filter(t => t.type === "income") // Keep only income
+  .map(t => t.amount) // Get amounts
+  .reduce((sum, amount) => sum + amount, 0); // Sum amounts
+
+console.log(totalIncome); // 1500
+

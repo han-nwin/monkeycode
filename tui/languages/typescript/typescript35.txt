@@ -1,0 +1,12 @@
+class Counter {
+  count = 0;
+
+  increment = () => {
+    this.count++;
+    console.log(`Count: ${this.count}`);
+  };
+}
+
+const counter = new Counter();
+counter.increment(); // "Count: 1"
+

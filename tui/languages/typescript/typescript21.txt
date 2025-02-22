@@ -1,0 +1,11 @@
+function introduce(name: string, age?: number): string {
+  return age ? `Hi, I'm ${name} and I'm ${age} years old.` : `Hi, I'm ${name}.`
+}
+
+const subtract = (x: number, y: number = 10): number => x - y
+
+console.log(introduce("John"))
+console.log(introduce("Alice", 25))
+console.log(subtract(20)) // 10
+console.log(subtract(20, 5)) // 15
+

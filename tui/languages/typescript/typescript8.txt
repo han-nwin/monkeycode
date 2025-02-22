@@ -1,0 +1,10 @@
+type Direction = "up" | "down" | "left" | "right"
+
+const move = (dir: Direction): void => {
+  console.log(`Moving ${dir}`)
+}
+
+move("up")
+move("left")
+// move("diagonal") // Error: Not allowed
+

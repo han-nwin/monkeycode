@@ -1,0 +1,10 @@
+const scores: number[] = [85, 40, 90, 75, 60];
+
+// Sort in ascending order
+scores.sort((a, b) => a - b);
+console.log(scores); // [40, 60, 75, 85, 90]
+
+// Get top 3 scores
+const topScores = scores.slice(-3);
+console.log(topScores); // [75, 85, 90]
+

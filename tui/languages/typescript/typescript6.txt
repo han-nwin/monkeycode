@@ -1,0 +1,9 @@
+function greet(name: string, greeting: string = "Hello"): string {
+  return `${greeting}, ${name}!`
+}
+
+const addNumbers = (a: number, b: number): number => a + b
+
+console.log(greet("Alice"))
+console.log(greet("Bob", "Hi"))
+console.log(addNumbers(10, 5))

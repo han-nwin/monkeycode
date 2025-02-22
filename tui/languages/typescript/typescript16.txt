@@ -1,0 +1,10 @@
+const prices: number[] = [10, 20, 30, 40, 50];
+
+// Sum of all prices
+const total = prices.reduce((sum, price) => sum + price, 0);
+console.log(total); // 150
+
+// Get the highest price
+const maxPrice = prices.reduce((max, price) => (price > max ? price : max), prices[0]);
+console.log(maxPrice); // 50
+

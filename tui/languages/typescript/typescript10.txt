@@ -1,0 +1,10 @@
+const names: string[] = ["Alice", "Bob", "Charlie", "David"];
+
+// Convert names to uppercase
+const upperNames = names.map(name => name.toUpperCase());
+console.log(upperNames); // ["ALICE", "BOB", "CHARLIE", "DAVID"]
+
+// Filter names starting with 'C'
+const cNames = names.filter(name => name.startsWith("C"));
+console.log(cNames); // ["Charlie"]
+

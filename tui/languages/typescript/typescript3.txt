@@ -1,0 +1,16 @@
+interface User {
+  id: number
+  name: string
+  isAdmin?: boolean // Optional property
+}
+
+type Product = {
+  id: number
+  name: string
+  price: number
+}
+
+const user: User = { id: 1, name: "Alice" }
+const product: Product = { id: 101, name: "Laptop", price: 999.99 }
+
+console.log(user, product)

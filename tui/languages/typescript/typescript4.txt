@@ -1,0 +1,10 @@
+enum Status {
+  Pending,
+  InProgress,
+  Completed,
+}
+
+const taskStatus: Status = Status.InProgress
+
+console.log(taskStatus) // 1
+console.log(Status[taskStatus]) // "InProgress"

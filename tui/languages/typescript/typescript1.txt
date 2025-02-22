@@ -1,0 +1,18 @@
+const num: number = 42
+const str: string = "Hello, TypeScript"
+const isBoolean: boolean = true
+const empty: null = null
+const notDefined: undefined = undefined
+
+const anything: any = "Can be anything"
+const unknownType: unknown = "Might be anything"
+
+function doNothing(): void {
+  console.log("This function returns nothing")
+}
+
+function throwError(): never {
+  throw new Error("This will never return")
+}
+
+console.log(num, str, isBoolean, empty, notDefined, anything, unknownType)

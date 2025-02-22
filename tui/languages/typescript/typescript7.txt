@@ -1,0 +1,12 @@
+type ID = number | string // Union Type
+
+type Person = { name: string }
+type Employee = { id: number }
+type EmployeeDetails = Person & Employee // Intersection Type
+
+const userId: ID = "abc123"
+
+const employee: EmployeeDetails = { name: "Alice", id: 1 }
+
+console.log(userId, employee)
+

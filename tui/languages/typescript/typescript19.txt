@@ -1,0 +1,11 @@
+enum Role {
+  Admin = "ADMIN",
+  User = "USER",
+  Guest = "GUEST",
+}
+
+const userRole: Role = Role.User
+
+console.log(userRole) // "USER"
+console.log(Role.Admin) // "ADMIN"
+

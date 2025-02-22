@@ -1,0 +1,8 @@
+const multiplyAndLog = (a: number, b: number): number => {
+  const result = a * b;
+  console.log(`Multiplication result: ${result}`);
+  return result;
+};
+
+multiplyAndLog(5, 3); // Logs "Multiplication result: 15"
+

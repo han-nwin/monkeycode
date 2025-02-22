@@ -1,0 +1,14 @@
+const products: string[] = ["Laptop", "Mouse", "Keyboard"];
+
+// Add items
+products.push("Monitor"); // Adds to the end
+products.unshift("Tablet"); // Adds to the beginning
+
+console.log(products); // ["Tablet", "Laptop", "Mouse", "Keyboard", "Monitor"]
+
+// Remove items
+products.pop(); // Removes last item ("Monitor")
+products.shift(); // Removes first item ("Tablet")
+
+console.log(products); // ["Laptop", "Mouse", "Keyboard"]
+

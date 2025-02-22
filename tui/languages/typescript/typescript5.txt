@@ -1,0 +1,6 @@
+const tuple: [string, number] = ["Alice", 25]
+const numbers: number[] = [1, 2, 3, 4, 5]
+const strings: Array<string> = ["a", "b", "c"]
+
+console.log(tuple, numbers, strings)
+

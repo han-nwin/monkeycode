@@ -1,0 +1,15 @@
+class ButtonHandler {
+  text: string;
+
+  constructor(text: string) {
+    this.text = text;
+  }
+
+  handleClick = () => {
+    console.log(`Button clicked: ${this.text}`);
+  };
+}
+
+const button = new ButtonHandler("Submit");
+document.getElementById("myButton")?.addEventListener("click", button.handleClick);
+

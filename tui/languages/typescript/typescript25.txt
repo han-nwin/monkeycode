@@ -1,0 +1,7 @@
+function introduce(name: string, age?: number): string {
+  return age ? `${name} is ${age} years old.` : `${name} prefers not to share their age.`;
+}
+
+console.log(introduce("Charlie")); // "Charlie prefers not to share their age."
+console.log(introduce("David", 30)); // "David is 30 years old."
+

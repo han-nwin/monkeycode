@@ -1,0 +1,15 @@
+const users = [
+  { id: 1, name: "Alice", age: 25 },
+  { id: 2, name: "Bob", age: 17 },
+  { id: 3, name: "Charlie", age: 30 },
+];
+
+// Get only adults (age >= 18)
+const adults = users.filter(user => user.age >= 18);
+console.log(adults); 
+// [{ id: 1, name: "Alice", age: 25 }, { id: 3, name: "Charlie", age: 30 }]
+
+// Get only names
+const names = users.map(user => user.name);
+console.log(names); // ["Alice", "Bob", "Charlie"]
+

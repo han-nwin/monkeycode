@@ -1,0 +1,12 @@
+type Animal = "cat" | "dog" | "rabbit" // Union Type
+
+type Employee = { id: number; name: string }
+type Manager = { department: string }
+type Boss = Employee & Manager // Intersection Type
+
+const pet: Animal = "dog"
+
+const boss: Boss = { id: 1, name: "Alice", department: "HR" }
+
+console.log(pet, boss)
+

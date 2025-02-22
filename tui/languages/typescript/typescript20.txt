@@ -1,0 +1,6 @@
+const userTuple: [string, number, boolean] = ["Alice", 30, true]
+const colors: string[] = ["red", "green", "blue"]
+const scores: Array<number> = [85, 90, 78]
+
+console.log(userTuple, colors, scores)
+
