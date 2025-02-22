@@ -1,0 +1,5 @@
+type PersonName = Pick<User, "name">;
+const person: PersonName = { name: "Alice" };
+
+type PersonWithoutAge = Omit<User, "age">;
+const personWithoutAge: PersonWithoutAge = { name: "Alice" };

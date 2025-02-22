@@ -1,0 +1,16 @@
+const prices = new Map<string, number>([
+  ["apple", 2],
+  ["banana", 1],
+  ["cherry", 3],
+]);
+
+// Loop through key-value pairs
+prices.forEach((price, fruit) => {
+  console.log(`${fruit} costs $${price}`);
+});
+
+// Output:
+// apple costs $2
+// banana costs $1
+// cherry costs $3
+

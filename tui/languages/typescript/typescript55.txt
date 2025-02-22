@@ -1,0 +1,21 @@
+interface Drivable {
+  drive(): void;
+}
+
+interface Flyable {
+  fly(): void;
+}
+
+class FlyingCar implements Drivable, Flyable {
+  drive(): void {
+    console.log("Driving...");
+  }
+  fly(): void {
+    console.log("Flying...");
+  }
+}
+
+const vehicle = new FlyingCar();
+vehicle.drive();
+vehicle.fly();
+

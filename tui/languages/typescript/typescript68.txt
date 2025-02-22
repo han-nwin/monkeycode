@@ -1,0 +1,5 @@
+const text = "TypeScript";
+const reversed = text.split("").reverse().join("");
+
+console.log(reversed); // "tpircSepyT"
+

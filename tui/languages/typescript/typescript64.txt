@@ -1,0 +1,8 @@
+const message = "I love JavaScript! JavaScript is awesome.";
+
+console.log(message.replace("JavaScript", "TypeScript")); 
+// "I love TypeScript! JavaScript is awesome."
+
+console.log(message.replaceAll("JavaScript", "TypeScript"));
+// "I love TypeScript! TypeScript is awesome."
+

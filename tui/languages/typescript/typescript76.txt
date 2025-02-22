@@ -1,0 +1,8 @@
+function checkType(value: string | number) {
+  if (typeof value === "string") {
+    console.log("It's a string:", value.toUpperCase());
+  } else {
+    console.log("It's a number:", value.toFixed(2));
+  }
+}
+

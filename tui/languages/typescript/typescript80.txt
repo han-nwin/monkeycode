@@ -1,0 +1,8 @@
+type UserRoles = Record<"admin" | "user" | "guest", boolean>;
+
+const roles: UserRoles = {
+  admin: true,
+  user: false,
+  guest: true,
+};
+

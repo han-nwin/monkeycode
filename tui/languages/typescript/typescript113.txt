@@ -1,0 +1,7 @@
+const settings = { theme: "dark", language: "en" };
+
+Object.freeze(settings);
+settings.theme = "light"; // Error in strict mode
+
+console.log(settings.theme); // "dark"
+

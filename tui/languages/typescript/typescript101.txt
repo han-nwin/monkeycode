@@ -1,0 +1,9 @@
+const hashMap = new Map<string, number>();
+
+hashMap.set("apple", 10);
+hashMap.set("banana", 5);
+
+console.log(hashMap.get("apple")); // 10
+console.log(hashMap.has("banana")); // true
+console.log(hashMap.size); // 2
+

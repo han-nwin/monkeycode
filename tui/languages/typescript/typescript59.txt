@@ -1,0 +1,17 @@
+class Person {
+  private _age: number = 0;
+
+  set age(value: number) {
+    if (value < 0) throw new Error("Age must be positive!");
+    this._age = value;
+  }
+
+  get age(): number {
+    return this._age;
+  }
+}
+
+const p = new Person();
+p.age = 25;
+console.log(p.age); // 25
+

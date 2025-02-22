@@ -1,0 +1,35 @@
+class HashMap<K, V> {
+  private buckets: [K, V][][] = new Array(10).fill(null).map(() => []);
+
+  private hash(key: K): number {
+    return (typeof key === "string" ? key.length : Number(key)) % this.buckets.length;
+  }
+
+  set(key: K, value: V): void {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+
+    for (let pair of bucket) {
+      if (pair[0] === key) {
+        pair[1] = value;
+        return;
+      }
+    }
+    bucket.push([key, value]);
+  }
+
+  get(key: K): V | undefined {
+    const index = this.hash(key);
+    const bucket = this.buckets[index];
+
+    for (let pair of bucket) {
+      if (pair[0] === key) return pair[1];
+    }
+    return undefined;
+  }
+}
+
+const hashMap = new HashMap<string, number>();
+hashMap.set("apple", 10);
+console.log(hashMap.get("apple")); // 10
+

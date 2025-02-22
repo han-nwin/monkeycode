@@ -1,0 +1,6 @@
+declare module "my-library" {
+  interface MyLibrary {
+    newMethod(): void;
+  }
+}
+

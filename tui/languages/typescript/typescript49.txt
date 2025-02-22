@@ -1,0 +1,21 @@
+class Parent {
+  constructor(public lastName: string) {}
+
+  introduce(): void {
+    console.log(`My last name is ${this.lastName}`);
+  }
+}
+
+class Child extends Parent {
+  constructor(lastName: string, public firstName: string) {
+    super(lastName);
+  }
+
+  fullName(): void {
+    console.log(`My full name is ${this.firstName} ${this.lastName}`);
+  }
+}
+
+const c = new Child("Smith", "John");
+c.fullName(); // "My full name is John Smith"
+

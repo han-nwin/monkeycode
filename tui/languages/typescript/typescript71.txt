@@ -1,0 +1,11 @@
+interface HasLength {
+  length: number;
+}
+
+function logLength<T extends HasLength>(item: T): number {
+  return item.length;
+}
+
+console.log(logLength("Hello")); // 5
+console.log(logLength([1, 2, 3])); // 3
+

@@ -1,0 +1,33 @@
+class MinHeap {
+  private heap: number[] = [];
+
+  private swap(i: number, j: number): void {
+    [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+  }
+
+  private bubbleUp(): void {
+    let index = this.heap.length - 1;
+    while (index > 0) {
+      let parentIndex = Math.floor((index - 1) / 2);
+      if (this.heap[parentIndex] <= this.heap[index]) break;
+      this.swap(parentIndex, index);
+      index = parentIndex;
+    }
+  }
+
+  insert(value: number): void {
+    this.heap.push(value);
+    this.bubbleUp();
+  }
+
+  print(): void {
+    console.log(this.heap);
+  }
+}
+
+const minHeap = new MinHeap();
+minHeap.insert(10);
+minHeap.insert(5);
+minHeap.insert(15);
+minHeap.print(); // [5, 10, 15]
+

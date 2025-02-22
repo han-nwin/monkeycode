@@ -1,0 +1,10 @@
+class FinalClass {
+  finalMethod(): void {
+    console.log("This method should not be overridden");
+  }
+}
+
+class AttemptToExtend extends FinalClass {
+  // Cannot override finalMethod
+}
+

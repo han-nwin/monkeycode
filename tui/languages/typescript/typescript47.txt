@@ -1,0 +1,12 @@
+class Company {
+  readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+const c = new Company("Monkey");
+console.log(c.name); // "Monkey"
+// c.name = "Code"; // Error (readonly)
+

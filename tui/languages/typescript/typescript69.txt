@@ -1,0 +1,7 @@
+function getFirst<T>(items: T[]): T {
+  return items[0];
+}
+
+console.log(getFirst<number>([1, 2, 3])); // 1
+console.log(getFirst<string>(["a", "b", "c"])); // "a"
+

@@ -1,0 +1,7 @@
+interface Car {
+  brand: string;
+  year: number;
+}
+
+type CarKeys = keyof Car; // "brand" | "year"
+

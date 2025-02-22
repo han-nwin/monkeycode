@@ -1,0 +1,10 @@
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number;
+}
+
+const user: User = { name: "Alice", age: 25 }; // Works due to declaration merging
+

@@ -1,0 +1,26 @@
+class DynamicArray<T> {
+  private data: T[] = [];
+
+  push(item: T): void {
+    this.data.push(item);
+  }
+
+  pop(): T | undefined {
+    return this.data.pop();
+  }
+
+  get(index: number): T | undefined {
+    return this.data[index];
+  }
+
+  print(): void {
+    console.log(this.data);
+  }
+}
+
+const arr = new DynamicArray<number>();
+arr.push(10);
+arr.push(20);
+arr.print(); // [10, 20]
+console.log(arr.pop()); // 20
+

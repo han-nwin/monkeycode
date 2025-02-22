@@ -1,0 +1,7 @@
+interface OptionalUser {
+  name?: string;
+  age?: number;
+}
+
+const requiredUser: Required<OptionalUser> = { name: "Alice", age: 25 };
+

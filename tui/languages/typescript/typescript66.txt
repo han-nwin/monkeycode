@@ -1,0 +1,6 @@
+const userInput = "   Hello, TypeScript!   ";
+
+console.log(userInput.trim()); // "Hello, TypeScript!"
+console.log(userInput.trimStart()); // "Hello, TypeScript!   "
+console.log(userInput.trimEnd()); // "   Hello, TypeScript!"
+

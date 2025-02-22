@@ -1,0 +1,22 @@
+class Animal {
+  protected type: string;
+
+  constructor(type: string) {
+    this.type = type;
+  }
+}
+
+class Dog extends Animal {
+  constructor() {
+    super("Dog");
+  }
+
+  getType(): string {
+    return this.type; // Allowed (protected property)
+  }
+}
+
+const d = new Dog();
+console.log(d.getType()); // "Dog"
+// console.log(d.type); // Error (protected)
+

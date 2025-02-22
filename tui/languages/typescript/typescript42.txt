@@ -1,0 +1,18 @@
+interface Operation {
+  (a: number, b: number): number; // Function signature
+}
+
+const add: Operation = (x, y) => x + y;
+const subtract: Operation = (x, y) => x - y;
+
+console.log(add(10, 5)); // 15
+console.log(subtract(10, 5)); // 5
+
+// Function using interface as a callback
+function calculate(a: number, b: number, operation: Operation): number {
+  return operation(a, b);
+}
+
+console.log(calculate(6, 3, add)); // 9
+console.log(calculate(6, 3, subtract)); // 3
+

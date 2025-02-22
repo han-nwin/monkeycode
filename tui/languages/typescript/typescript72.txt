@@ -1,0 +1,7 @@
+interface User {
+  name: string;
+  age: number;
+}
+
+const partialUser: Partial<User> = { name: "Alice" }; // Only `name` provided
+

@@ -1,0 +1,18 @@
+class BankAccount {
+  private balance: number = 0;
+
+  deposit(amount: number): void {
+    this.balance += amount;
+    console.log(`Deposited: $${amount}`);
+  }
+
+  getBalance(): number {
+    return this.balance;
+  }
+}
+
+const account = new BankAccount();
+account.deposit(100);
+console.log(account.getBalance()); // 100
+// account.balance = 500; // Error (private property)
+

@@ -1,0 +1,15 @@
+class Animal {
+  makeSound(): void {
+    console.log("Some sound");
+  }
+}
+
+class Cat extends Animal {
+  makeSound(): void {
+    console.log("Meow!");
+  }
+}
+
+const pet = new Cat();
+pet.makeSound(); // "Meow!"
+

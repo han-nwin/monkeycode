@@ -1,0 +1,7 @@
+type PersonRecord = Record<string, number>;
+
+const ages: PersonRecord = {
+  Alice: 25,
+  Bob: 30,
+};
+

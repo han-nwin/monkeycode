@@ -1,0 +1,14 @@
+const scores = new Map<string, number>([
+  ["John", 85],
+  ["Jane", 90],
+]);
+
+const entries = Array.from(scores.entries()); // Convert to array
+console.log(entries); // [ ['John', 85], ['Jane', 90] ]
+
+const keys = Array.from(scores.keys());
+console.log(keys); // ['John', 'Jane']
+
+const values = Array.from(scores.values());
+console.log(values); // [85, 90]
+

@@ -1,0 +1,10 @@
+type TreeNode = {
+  value: string;
+  children?: TreeNode[];
+};
+
+const tree: TreeNode = {
+  value: "Root",
+  children: [{ value: "Child1" }, { value: "Child2", children: [{ value: "Grandchild" }] }],
+};
+

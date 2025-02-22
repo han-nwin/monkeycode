@@ -1,0 +1,7 @@
+const users = new Map<number, string>();
+users.set(1, "Alice");
+users.set(2, "Bob");
+
+console.log(users.has(1)); // true
+console.log(users.has(3)); // false
+

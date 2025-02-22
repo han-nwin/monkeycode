@@ -1,0 +1,11 @@
+class Car {
+  public brand: string;
+
+  constructor(brand: string) {
+    this.brand = brand;
+  }
+}
+
+const car = new Car("Tesla");
+console.log(car.brand); // "Tesla"
+

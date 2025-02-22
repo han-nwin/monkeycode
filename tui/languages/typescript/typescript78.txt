@@ -1,0 +1,17 @@
+interface Cat {
+  meow: () => void;
+}
+
+interface Dog {
+  bark: () => void;
+}
+
+function isCat(animal: Cat | Dog): animal is Cat {
+  return (animal as Cat).meow !== undefined;
+}
+
+const pet: Cat = { meow: () => console.log("Meow!") };
+if (isCat(pet)) {
+  pet.meow();
+}
+

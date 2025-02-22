@@ -1,0 +1,4 @@
+const laugh = "Ha! ";
+
+console.log(laugh.repeat(3)); // "Ha! Ha! Ha! "
+

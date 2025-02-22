@@ -1,0 +1,11 @@
+const firstName = "John";
+const lastName = "Doe";
+
+// Using `+` operator
+const fullName = firstName + " " + lastName;
+console.log(fullName); // "John Doe"
+
+// Using template literals
+const fullNameTemplate = `${firstName} ${lastName}`;
+console.log(fullNameTemplate); // "John Doe"
+

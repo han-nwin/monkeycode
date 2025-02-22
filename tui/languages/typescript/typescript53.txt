@@ -1,0 +1,17 @@
+abstract class Shape {
+  abstract area(): number; // Must be implemented by subclasses
+}
+
+class Circle extends Shape {
+  constructor(private radius: number) {
+    super();
+  }
+
+  area(): number {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+const c = new Circle(5);
+console.log(c.area()); // 78.54
+

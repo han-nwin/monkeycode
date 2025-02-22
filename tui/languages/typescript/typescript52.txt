@@ -1,0 +1,19 @@
+class Base {
+  greet(): void {
+    console.log("Hello from Base");
+  }
+}
+
+class Sub extends Base {
+  greet(): void {
+    super.greet();
+    console.log("Hello from Sub");
+  }
+}
+
+const obj = new Sub();
+obj.greet();
+// Output:
+// "Hello from Base"
+// "Hello from Sub"
+

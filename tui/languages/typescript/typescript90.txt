@@ -1,0 +1,15 @@
+function selectionSort(arr: number[]): number[] {
+  for (let i = 0; i < arr.length; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[j] < arr[minIndex]) {
+        minIndex = j;
+      }
+    }
+    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]; // Swap
+  }
+  return arr;
+}
+
+console.log(selectionSort([29, 10, 14, 37, 13])); // [10, 13, 14, 29, 37]
+

@@ -1,0 +1,6 @@
+const text = "Hello, TypeScript!";
+console.log(text.length); // 18
+
+const phrase = "TypeScript is Amazing!";
+console.log(phrase.toUpperCase()); // "TYPESCRIPT IS AMAZING!"
+console.log(phrase.toLowerCase()); // "typescript is amazing!"

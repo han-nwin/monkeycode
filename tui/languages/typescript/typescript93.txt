@@ -1,0 +1,13 @@
+function quickSort(arr: number[]): number[] {
+  if (arr.length <= 1) return arr;
+
+  const pivot = arr[arr.length - 1];
+  const left = arr.filter(el => el < pivot);
+  const right = arr.filter(el => el > pivot);
+  const equal = arr.filter(el => el === pivot);
+
+  return [...quickSort(left), ...equal, ...quickSort(right)];
+}
+
+console.log(quickSort([3, 6, 8, 10, 1, 2, 1])); // [1, 1, 2, 3, 6, 8, 10]
+

@@ -1,0 +1,11 @@
+const numbers = [10, 20, 30, 40];
+
+for (const num of numbers) {
+  console.log(num);
+}
+
+const person = { name: "Alice", age: 25, job: "Developer" };
+
+for (const key in person) {
+  console.log(`${key}: ${person[key as keyof typeof person]}`);
+}

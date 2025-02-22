@@ -1,0 +1,6 @@
+const student = { id: 1, name: "Charlie", grade: "A" };
+
+console.log(Object.keys(student)); // ['id', 'name', 'grade']
+console.log(Object.values(student)); // [1, 'Charlie', 'A']
+console.log(Object.entries(student)); // [['id', 1], ['name', 'Charlie'], ['grade', 'A']]
+

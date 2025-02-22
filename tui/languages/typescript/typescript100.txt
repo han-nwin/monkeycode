@@ -1,0 +1,37 @@
+class Graph {
+  private adjacencyList: { [key: string]: string[] } = {};
+
+  addVertex(vertex: string): void {
+    if (!this.adjacencyList[vertex]) {
+      this.adjacencyList[vertex] = [];
+    }
+  }
+
+  addEdge(vertex1: string, vertex2: string): void {
+    this.adjacencyList[vertex1].push(vertex2);
+    this.adjacencyList[vertex2].push(vertex1);
+  }
+
+  bfs(start: string): void {
+    const queue: string[] = [start];
+    const visited = new Set<string>();
+
+    while (queue.length) {
+      const vertex = queue.shift()!;
+      if (!visited.has(vertex)) {
+        console.log(vertex);
+        visited.add(vertex);
+        queue.push(...this.adjacencyList[vertex]);
+      }
+    }
+  }
+}
+
+const graph = new Graph();
+graph.addVertex("A");
+graph.addVertex("B");
+graph.addVertex("C");
+graph.addEdge("A", "B");
+graph.addEdge("A", "C");
+graph.bfs("A"); // A, B, C
+

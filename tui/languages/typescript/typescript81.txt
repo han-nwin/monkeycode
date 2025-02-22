@@ -1,0 +1,5 @@
+type IsString<T> = T extends string ? "Yes" : "No";
+
+type Result1 = IsString<string>; // "Yes"
+type Result2 = IsString<number>; // "No"
+

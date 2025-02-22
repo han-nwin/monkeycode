@@ -1,0 +1,12 @@
+class Counter {
+  static count: number = 0;
+
+  constructor() {
+    Counter.count++;
+  }
+}
+
+new Counter();
+new Counter();
+console.log(Counter.count); // 2
+

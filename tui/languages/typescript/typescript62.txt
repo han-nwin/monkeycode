@@ -1,0 +1,6 @@
+const str = "TypeScript";
+
+console.log(str.slice(0, 4)); // "Type" (Start at index 0, end before index 4)
+console.log(str.substring(4, 10)); // "Script" (Similar to `slice()`, but does not accept negative indexes)
+console.log(str.substr(4, 6)); // "Script" (Deprecated, use `slice()` instead)
+

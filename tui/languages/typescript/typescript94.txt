@@ -1,0 +1,19 @@
+function countingSort(arr: number[]): number[] {
+  const max = Math.max(...arr);
+  const count = new Array(max + 1).fill(0);
+
+  arr.forEach(num => count[num]++);
+  
+  let sortedArr: number[] = [];
+  count.forEach((times, num) => {
+    while (times > 0) {
+      sortedArr.push(num);
+      times--;
+    }
+  });
+
+  return sortedArr;
+}
+
+console.log(countingSort([4, 2, 2, 8, 3, 3, 1])); // [1, 2, 2, 3, 3, 4, 8]
+

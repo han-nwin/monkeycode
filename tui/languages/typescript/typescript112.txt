@@ -1,0 +1,9 @@
+const salaries = { Alice: 5000, Bob: 7000, Charlie: 8000 };
+
+// Increase salaries by 10%
+const updatedSalaries = Object.fromEntries(
+  Object.entries(salaries).map(([name, salary]) => [name, salary * 1.1])
+);
+
+console.log(updatedSalaries); // { Alice: 5500, Bob: 7700, Charlie: 8800 }
+

@@ -1,0 +1,5 @@
+const car = { brand: "Tesla", model: "Model X" };
+
+console.log("brand" in car); // true
+console.log("price" in car); // false
+

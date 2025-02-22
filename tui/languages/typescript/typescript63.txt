@@ -1,0 +1,8 @@
+const sentence = "Learning TypeScript is fun!";
+
+console.log(sentence.indexOf("TypeScript")); // 9 (First occurrence)
+console.log(sentence.lastIndexOf("is")); // 19 (Last occurrence)
+console.log(sentence.includes("fun")); // true
+console.log(sentence.startsWith("Learning")); // true
+console.log(sentence.endsWith("fun!")); // true
+

@@ -1,0 +1,11 @@
+function binarySearch(arr: number[], target: number, left: number = 0, right: number = arr.length - 1): number {
+  if (left > right) return -1; // Base case (not found)
+
+  const mid = Math.floor((left + right) / 2);
+  if (arr[mid] === target) return mid; // Found target
+  if (arr[mid] > target) return binarySearch(arr, target, left, mid - 1);
+  return binarySearch(arr, target, mid + 1, right);
+}
+
+console.log(binarySearch([1, 2, 3, 4, 5, 6, 7, 8], 5)); // 4
+

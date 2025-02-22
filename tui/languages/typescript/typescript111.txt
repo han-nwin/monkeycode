@@ -1,0 +1,8 @@
+const nestedObj = { a: 1, b: { c: 2, d: 3 } };
+
+const deepClone = JSON.parse(JSON.stringify(nestedObj));
+deepClone.b.c = 42;
+
+console.log(nestedObj.b.c); // 2 (original remains unchanged)
+console.log(deepClone.b.c); // 42
+

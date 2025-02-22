@@ -1,0 +1,12 @@
+interface CanFly {
+  fly(): void;
+}
+
+class Bird implements CanFly {
+  fly(): void {
+    console.log("Flying high!");
+  }
+}
+
+const b = new Bird();
+b.fly(); // "Flying high!"

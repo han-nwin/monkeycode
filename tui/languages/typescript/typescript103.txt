@@ -1,0 +1,10 @@
+const map = new Map<string, number>();
+map.set("x", 100);
+map.set("y", 200);
+
+map.delete("x"); // Removes "x"
+console.log(map.has("x")); // false
+
+map.clear(); // Removes all entries
+console.log(map.size); // 0
+
