@@ -74,6 +74,66 @@ var (
 			Bold(true)
 )
 
+/* Styling for SSH */
+// Global variable for the renderer
+var renderer *lipgloss.Renderer
+
+// Function to initialize styles with the renderer
+func SetupLipglossStyles(r *lipgloss.Renderer) {
+	renderer = r
+
+	// Use `renderer.NewStyle()` instead of `lipgloss.NewStyle()`
+	titleStyle = renderer.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("#CCD0DA")).
+		Background(lipgloss.Color("#8839EF")).
+		Padding(-1, 1)
+
+	optionStyle = renderer.NewStyle().
+		Foreground(lipgloss.Color("#74C7EC")).
+		PaddingLeft(2)
+
+	statsStyle = renderer.NewStyle().
+		Foreground(lipgloss.Color("#94E2D5")).
+		Bold(true).
+		PaddingLeft(1)
+
+	// Instruction style
+	instructionStyle = renderer.NewStyle().
+				Italic(true).
+				Foreground(lipgloss.Color("#9399B2")) // Muted gray (Subtext1)
+
+	// Lable syle
+	labelStyle = renderer.NewStyle().
+			Foreground(lipgloss.Color("#1E1E2E")).
+			Background(lipgloss.Color("#9399B2"))
+
+	// Correct character style
+	correctCharStyle = renderer.NewStyle().
+				Foreground(lipgloss.Color("#C9CBFF")). // Soft white (Text)
+				Bold(true)
+
+	// Incorrect character style
+	incorrectCharStyle = renderer.NewStyle().
+				Foreground(lipgloss.Color("#F38BA8")). // Red (Red)
+				Bold(true)
+
+	// Untyped character style
+	untypedCharStyle = renderer.NewStyle().
+				Foreground(lipgloss.Color("#585B70")) // Dimmed gray (Surface1)
+
+	// Cursor style (lavender)
+	cursorStyle = renderer.NewStyle().
+			Foreground(lipgloss.Color("#CBA6F7")) // (Lavender)
+
+	// WPM style
+	wpmStyle = renderer.NewStyle().
+			Foreground(lipgloss.Color("#FAB387")). // Peach
+			Bold(true)
+}
+/* --- End styling for ssh */
+
+
 func renderBackground(width, height int, color string) string {
 	backgroundStyle := lipgloss.NewStyle().
 		Background(lipgloss.Color(color)).

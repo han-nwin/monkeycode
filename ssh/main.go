@@ -3,89 +3,157 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
-	"github.com/han-nwin/monkeycode/tui"
 	"net"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
-    "strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+	// "github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/log"
 	"github.com/charmbracelet/ssh"
 	"github.com/charmbracelet/wish"
+	"github.com/charmbracelet/wish/activeterm"
 	"github.com/charmbracelet/wish/bubbletea"
 	"github.com/charmbracelet/wish/logging"
+
+	monkeycode "github.com/han-nwin/monkeycode/tui"
+	// "github.com/han-nwin/monkeycode/profiles"
 )
 
 const (
 	host = "localhost"
-	port = "2222"
+	port = "23234"
 )
 
 func main() {
-	// Create the Wish SSH server
-	server, err := wish.NewServer(
+	s, err := wish.NewServer(
 		wish.WithAddress(net.JoinHostPort(host, port)),
-		wish.WithHostKeyPath(".ssh/id_ed25519"), // Path to your SSH host key
+		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		wish.WithMiddleware(
-            bubbletea.Middleware(teaHandler),
+			bubbletea.Middleware(teaHandler),
+			activeterm.Middleware(), // Bubble Tea apps usually require a PTY.
 			logging.Middleware(),
 		),
 	)
 	if err != nil {
-		fmt.Printf("Error starting SSH server: %v\n", err)
-		os.Exit(1)
+		log.Error("Could not start server", "error", err)
 	}
 
-	// Graceful shutdown setup
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-	// Start the SSH server
-    // TODO: SSH isn't taking keystrokes
-	fmt.Printf("SSH server started on %s:%s\n", host, port)
+	log.Info("Starting SSH server", "host", host, "port", port)
 	go func() {
-		if err := server.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
-			fmt.Printf("Error running SSH server: %v\n", err)
+		if err = s.ListenAndServe(); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
+			log.Error("Could not start server", "error", err)
 			done <- nil
 		}
 	}()
 
 	<-done
-	fmt.Println("Stopping SSH server")
+	log.Info("Stopping SSH server")
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	if err := server.Shutdown(ctx); err != nil {
-		fmt.Printf("Error shutting down server: %v\n", err)
+	defer func() { cancel() }()
+	if err := s.Shutdown(ctx); err != nil && !errors.Is(err, ssh.ErrServerClosed) {
+		log.Error("Could not stop server", "error", err)
 	}
 }
 
-// You can write your own custom bubbletea middleware that wraps tea.Program.
-// Make sure you set the program input and output to ssh.Session.
 func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+    // Get terminal size
+    pty, _, _ := s.Pty()
 
-    // Create the Bubble Tea model
-    model := tui.Model{
+    // Ensure Lipgloss uses correct color profile
+    renderer := bubbletea.MakeRenderer(s)
+
+    // Initialize monkeycode model with the correct width, height, and renderer
+    m := monkeycode.Model{
         PromptText:     "",
         UserText:       &strings.Builder{},
         CursorVisible:  true,
         CursorPosition: 0,
-        Width:          80,
-        Height:         20,
-        FinalWPM:       0,
+        Width:          pty.Window.Width,  // Set correct terminal width
+        Height:         pty.Window.Height, // Set correct terminal height
+        WPM:            0,
+        Accuracy:       0,
     }
 
-    // Initialize the Bubble Tea program options
-    options := []tea.ProgramOption{
-        tea.WithAltScreen(),          // Use an alternate screen for better TUI experience
-        tea.WithInput(s),             // Set input to the SSH session
-        tea.WithOutput(s),            // Set output to the SSH session
-    }
+    // Setup lipgloss style
+    monkeycode.SetupLipglossStyles(renderer)
 
-    // Return the initialized model and options
-    return model, options
+    return m, []tea.ProgramOption{tea.WithAltScreen()}
 }
 
-
+// // You can wire any Bubble Tea model up to the middleware with a function that
+// // handles the incoming ssh.Session. Here we just grab the terminal info and
+// // pass it to the new model. You can also return tea.ProgramOptions (such as
+// // tea.WithAltScreen) on a session by session basis.
+// func teaHandler(s ssh.Session) (tea.Model, []tea.ProgramOption) {
+// 	// This should never fail, as we are using the activeterm middleware.
+// 	pty, _, _ := s.Pty()
+//
+// 	// When running a Bubble Tea app over SSH, you shouldn't use the default
+// 	// lipgloss.NewStyle function.
+// 	// That function will use the color profile from the os.Stdin, which is the
+// 	// server, not the client.
+// 	// We provide a MakeRenderer function in the bubbletea middleware package,
+// 	// so you can easily get the correct renderer for the current session, and
+// 	// use it to create the styles.
+// 	// The recommended way to use these styles is to then pass them down to
+// 	// your Bubble Tea model.
+// 	renderer := bubbletea.MakeRenderer(s)
+// 	txtStyle := renderer.NewStyle().Foreground(lipgloss.Color("10"))
+// 	quitStyle := renderer.NewStyle().Foreground(lipgloss.Color("8"))
+//
+// 	bg := "light"
+// 	if renderer.HasDarkBackground() {
+// 		bg = "dark"
+// 	}
+//
+// 	m := model{
+// 		term:      pty.Term,
+// 		profile:   renderer.ColorProfile().Name(),
+// 		width:     pty.Window.Width,
+// 		height:    pty.Window.Height,
+// 		bg:        bg,
+// 		txtStyle:  txtStyle,
+// 		quitStyle: quitStyle,
+// 	}
+// 	return m, []tea.ProgramOption{tea.WithAltScreen()}
+// }
+//
+// // Just a generic tea.Model to demo terminal information of ssh.
+// type model struct {
+// 	term      string
+// 	profile   string
+// 	width     int
+// 	height    int
+// 	bg        string
+// 	txtStyle  lipgloss.Style
+// 	quitStyle lipgloss.Style
+// }
+//
+// func (m model) Init() tea.Cmd {
+// 	return nil
+// }
+//
+// func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+// 	switch msg := msg.(type) {
+// 	case tea.WindowSizeMsg:
+// 		m.height = msg.Height
+// 		m.width = msg.Width
+// 	case tea.KeyMsg:
+// 		switch msg.String() {
+// 		case "q", "ctrl+c":
+// 			return m, tea.Quit
+// 		}
+// 	}
+// 	return m, nil
+// }
+//
+// func (m model) View() string {
+// 	s := fmt.Sprintf("Your term is %s\nYour window size is %dx%d\nBackground: %s\nColor Profile: %s", m.term, m.width, m.height, m.bg, m.profile)
+// 	return m.txtStyle.Render(s) + "\n\n" + m.quitStyle.Render("Press 'q' to quit\n")
+// }
