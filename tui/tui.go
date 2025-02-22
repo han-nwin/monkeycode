@@ -217,6 +217,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.SelectedLang = "java"
 			case "6":
 				m.SelectedLang = "javascript"
+			case "7":
+				m.SelectedLang = "typescript"
 			case "q":
 				return m, tea.Quit
 			default:
@@ -314,7 +316,7 @@ func (m Model) View() string {
 	switch m.State {
 	case PreProgram:
 		title := titleStyle.Render("Select a Language")
-		title = "\n" + title
+		title = "\n" + title + "\n"
 		options := lipgloss.JoinVertical(lipgloss.Left,
 			optionStyle.Render("\n[1] Go"),
 			optionStyle.Render("[2] C"),
@@ -322,7 +324,7 @@ func (m Model) View() string {
 			optionStyle.Render("[4] Python"),
 			optionStyle.Render("[5] Java"),
 			optionStyle.Render("[6] JavaScript"),
-			optionStyle.Render("[7] TypeScript"),
+			optionStyle.Render("[7] TypeScript\n"),
 		)
 
 		labels := lipgloss.JoinHorizontal(lipgloss.Bottom,
@@ -330,12 +332,20 @@ func (m Model) View() string {
 			instructionStyle.Render(" exit"),
 		)
 
-		instructions := lipgloss.JoinVertical(lipgloss.Left,
+		instructions := lipgloss.JoinVertical(lipgloss.Center,
 			instructionStyle.Render("\nUse number keys to pick a language.\n"),
 			labels,
 		)
 
-		return wordwrap.String(lipgloss.JoinVertical(lipgloss.Center, title, options, instructions), m.Width)
+
+		// Center the entire content block
+		centeredContent := lipgloss.NewStyle().
+			Width(m.Width).
+			Height(m.Height).
+			Align(lipgloss.Center).
+			Render(title, options, instructions)
+
+		return wordwrap.String(centeredContent, m.Width)
 
 	case TypingTUI:
 		userInput := m.UserText.String()
@@ -398,8 +408,9 @@ func (m Model) View() string {
 
 		// Render the styled elements using global styles
 		title := titleStyle2.Render("Typing Complete!")
+        title = "\n" + title + "\n"
 		stats := lipgloss.JoinVertical(
-			lipgloss.Left,
+			lipgloss.Center,
 			statsStyle.Render(fmt.Sprintf("\nWPM: %d", m.WPM)),
 			statsStyle.Render(fmt.Sprintf("Accuracy: %.2f%%\n\n", m.Accuracy)),
 		)
@@ -414,17 +425,19 @@ func (m Model) View() string {
 		)
 
 		instructions := lipgloss.JoinVertical(
-			lipgloss.Left,
+			lipgloss.Center,
 			labels,
 		)
 
-		// Combine all the parts into a single view
-		return wordwrap.String(lipgloss.JoinVertical(
-			lipgloss.Center,
-			title,
-			stats,
-			instructions,
-		), m.Width)
+
+		// Center the entire content block
+		centeredContent := lipgloss.NewStyle().
+			Width(m.Width).
+			Height(m.Height).
+			Align(lipgloss.Center).
+			Render(title, stats, instructions)
+
+		return wordwrap.String(centeredContent, m.Width)
 	}
 	return ""
 }
