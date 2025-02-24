@@ -256,7 +256,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.UserText.WriteRune('\n')
 
 			} else if msg.Type == tea.KeyTab { //type Tab
-				m.UserText.WriteString("    ")
+                if m.SelectedLang == "typescript" {
+                    m.UserText.WriteString("  ") // Typescript 1 tab = 2 spaces
+                } else {
+                    m.UserText.WriteString("    ")
+                }
 
 			} else if msg.Type == tea.KeyBackspace { //type Backspace
 				currentText := m.UserText.String()
